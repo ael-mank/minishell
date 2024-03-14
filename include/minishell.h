@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:36:17 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/03/13 09:48:07 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/03/14 17:54:59 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,10 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include "libft.h"
+
+// Builtins
+int	ft_pwd(void);
+
 
 #endif

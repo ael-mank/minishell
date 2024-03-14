@@ -1,33 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/13 09:16:09 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/03/14 17:54:16 by ael-mank         ###   ########.fr       */
+/*   Created: 2024/03/14 17:48:25 by ael-mank          #+#    #+#             */
+/*   Updated: 2024/03/14 17:53:51 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(void)
+int	err(const char *msg, int ret)
 {
-	while (1)
-	{
-		char *line = readline("minishell> ");
-		if (!line)
-			break ;
-		add_history(line);
-		if (strcmp(line, "pwd") == 0)
-		{
-			ft_pwd();
-		}
-		else
-		{
-			printf("Error: command not found: %s\n", line);
-		}
-		free(line);
-	}
+    if (msg)
+        ft_printf("%s\n", msg);
+    return ret;
+}
+
+int	ft_pwd(void)
+{
+    char *path;
+
+    path = getcwd(NULL, 0);
+    if (!path)
+        return err("Error getting current directory", -1);
+    ft_printf("%s\n", path);
+    free(path);
+    return (0);
 }
