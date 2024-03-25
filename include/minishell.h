@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:36:17 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/03/19 14:19:10 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/03/25 06:58:31 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,21 @@
 
 // Builtins
 int		ft_pwd(void);
-int		ft_cd(void);
+int		ft_cd(char **args);
 int		ft_echo(char **args);
 void	print_env(char **env);
 
 // Signals
-
 void	setup_signals(void);
 
+//Syntax
+int			syntax_error_checker(const char *input);
+int			has_unclosed_quotes(const char *input);
+int			has_invalid_redirections(const char *input);
+int			has_misplaced_operators(const char *input);
+int			has_logical_operators(const char *input);
+void		update_quote_counts(char c, int *s_q_count, int *d_q_count);
+const char	*skip_spaces(const char *input);
+int			is_invalid_operator(const char **input);
 
 #endif
