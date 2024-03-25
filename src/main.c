@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:16:09 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/03/25 06:59:07 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/03/25 18:01:21 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	main(int argc, char **argv, char **env)
 {
 	(void)argc;
 	(void)argv;
+	(void)env;
 	setup_signals();
 	while (1)
 	{
@@ -25,7 +26,7 @@ int	main(int argc, char **argv, char **env)
 		if (!line)
 			break ;
 		add_history(line);
-		syntax_error_checker(line);
+		check_syntax_errors(line);
 		//Add check for builtin function
 		// if (strcmp(line, "pwd") == 0)
 		// 	ft_pwd();
