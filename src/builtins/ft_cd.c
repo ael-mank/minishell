@@ -1,32 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/14 17:48:25 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/03/18 06:58:06 by ael-mank         ###   ########.fr       */
+/*   Created: 2024/03/18 06:53:58 by ael-mank          #+#    #+#             */
+/*   Updated: 2024/03/25 05:42:18 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	err(const char *msg, int ret)
+int	ft_cd(void)
 {
-	if (msg)
-		ft_printf("%s\n", msg);
-	return (ret);
-}
-
-int	ft_pwd(void)
-{
-	char *path;
-
-	path = getcwd(NULL, 0);
-	if (!path)
-		return (err("Error getting current directory", -1));
-	ft_printf("%s\n", path);
-	free(path);
-	return (0);
+	//AJOUTER UPDATE OLD_PWD
+	if (args[1] == NULL)
+		fprintf(stderr, "ft_cd: expected argument\n");
+	else
+	{
+		if (chdir(args[1]) != 0)
+			perror("ft_cd");
+	}
+	return (1);
 }
