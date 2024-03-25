@@ -6,38 +6,37 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 05:53:13 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/03/25 07:43:43 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/03/25 17:57:46 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	update_quote_counts(char c, int *s_q_count, int *d_q_count)
+void	increment_quote_count(char c, int *single_quote_count,
+		int *double_quote_count)
 {
 	if (c == '\"')
-		(*d_q_count)++;
+		(*double_quote_count)++;
 	else if (c == '\'')
-		(*s_q_count)++;
+		(*single_quote_count)++;
 }
 
-const char	*skip_spaces(const char *input)
+const char	*skip_whitespace(const char *input)
 {
-	while (*input && (*input == ' ' || *input == '\t'))
+	while (*input && ft_isspace(*input))
 		input++;
 	return (input);
 }
 
-// Function to check if the current character sequence is an invalid operator
-int is_invalid_operator(const char **input)
+int	is_invalid_redirection(const char **input)
 {
-	const char *operator_start;
+	const char	*operator_start = *input;
 
-	operator_start = *input;
 	(*input)++;
 	if (*operator_start == **input)
 		(*input)++;
-	*input = skip_spaces(*input); // Skip any spaces or tabs
-	if (**input == '\0' || **input == '>' || **input == '<' || **input == '|') // If the next character is the end of the string or one of the operators: '>', '<', '|'
-		return (1); // Return 1 to indicate that it is an invalid operator
-	return (0); // Return 0 to indicate that it is a valid operator
+	*input = skip_whitespace(*input);
+	if (**input == '\0' || ft_strchr("><|", **input))
+		return (1);
+	return (0);
 }
