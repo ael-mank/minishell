@@ -1,32 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/14 17:48:25 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/03/18 06:58:06 by ael-mank         ###   ########.fr       */
+/*   Created: 2024/03/18 06:49:21 by ael-mank          #+#    #+#             */
+/*   Updated: 2024/03/18 06:58:01 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	err(const char *msg, int ret)
+int	ft_echo(char **args)
 {
-	if (msg)
-		ft_printf("%s\n", msg);
-	return (ret);
-}
+	int i;
+	int end_line;
 
-int	ft_pwd(void)
-{
-	char *path;
-
-	path = getcwd(NULL, 0);
-	if (!path)
-		return (err("Error getting current directory", -1));
-	ft_printf("%s\n", path);
-	free(path);
+	i = 1;
+	if (args[i][0] == '-' && args[i][1] == 'n')
+	{
+		end_line = 0;
+		i++;
+	}
+	else
+		end_line = 1;
+	while (args[i])
+	{
+		ft_printf("%s", args[i]);
+		if (args[i + 1])
+			ft_printf(" ");
+		i++;
+	}
+	if (end_line)
+		ft_printf("\n");
 	return (0);
 }

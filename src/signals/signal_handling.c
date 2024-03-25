@@ -1,32 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   signal_handling.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/14 17:48:25 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/03/18 06:58:06 by ael-mank         ###   ########.fr       */
+/*   Created: 2024/03/19 12:14:29 by ael-mank          #+#    #+#             */
+/*   Updated: 2024/03/25 05:42:57 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	err(const char *msg, int ret)
+//Might need to add sum signals handling in the exec part
+
+void	sigint_handler(int sig)
 {
-	if (msg)
-		ft_printf("%s\n", msg);
-	return (ret);
+	(void)sig;
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
+void	setup_signals(void)
+{
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
 }
 
-int	ft_pwd(void)
-{
-	char *path;
 
-	path = getcwd(NULL, 0);
-	if (!path)
-		return (err("Error getting current directory", -1));
-	ft_printf("%s\n", path);
-	free(path);
-	return (0);
-}
