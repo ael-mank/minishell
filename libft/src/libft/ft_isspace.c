@@ -1,26 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_cd.c                                            :+:      :+:    :+:   */
+/*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/18 06:53:58 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/03/25 06:58:17 by ael-mank         ###   ########.fr       */
+/*   Created: 2024/03/25 06:57:08 by ael-mank          #+#    #+#             */
+/*   Updated: 2024/03/25 06:57:16 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	ft_cd(char **args)
+int	ft_isspace(int c)
 {
-	//AJOUTER UPDATE OLD_PWD
-	if (args[1] == NULL)
-		fprintf(stderr, "ft_cd: expected argument\n");
-	else
-	{
-		if (chdir(args[1]) != 0)
-			perror("ft_cd");
-	}
-	return (1);
+	return (c == ' ' || c == '\t' || c == '\n'
+		|| c == '\v' || c == '\f' || c == '\r');
 }
