@@ -6,43 +6,42 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:16:09 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/03/13 09:49:00 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/03/19 14:57:24 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(void)
+//ADD = init env as linked lists
+
+int	main(int argc, char **argv, char **env)
 {
+	(void)argc;
+	(void)argv;
+	setup_signals();
 	while (1)
 	{
 		char *line = readline("minishell> ");
 		if (!line)
 			break ;
 		add_history(line);
+		//Add check for builtin function
 		if (strcmp(line, "pwd") == 0)
+			ft_pwd();
+		else if (strcmp(line, "env") == 0)
+			print_env(env);
+		else if (strcmp(line, "cd") == 0)
+			ft_cd();
+		else if (strcmp(line, "echo") == 0)
+			ft_echo(NULL);
+		else if (strcmp(line, "exit") == 0)
 		{
-			pid_t pid = fork();
-			if (pid < 0)
-			{
-				perror("fork failed");
-			}
-			else if (pid == 0)
-			{
-				char *argv[] = {"/bin/pwd", NULL};
-				execve(argv[0], argv, NULL);
-				perror("execve failed");
-				exit(1);
-			}
-			else
-			{
-				waitpid(pid, NULL, 0);
-			}
+			free(line);
+			break ;
 		}
 		else
-		{
 			printf("Error: command not found: %s\n", line);
-		}
 		free(line);
 	}
+	return (0);
 }

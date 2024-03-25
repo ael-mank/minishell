@@ -3,11 +3,14 @@ CC = gcc
 SRC_DIR = ./src/
 OBJ_DIR = ./obj/
 CFLAGS = -Wall -Wextra -Werror -Ilibft/include -Iinclude -Llibft
-SRC_FILES = main
+SRC_FILES = main signals/signal_handling builtins/ft_pwd builtins/ft_cd builtins/ft_echo builtins/ft_env
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
 OBJ = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
 NAME = minishell
 MAKE := make
+VAL_HIDE	:= readline.hide
+VAL_FLAGS	:= --leak-check=full --show-leak-kinds=all --suppressions=$(VAL_HIDE)
+
 
 GREEN=\033[0;32m
 YELLOW=\033[0;33m
@@ -16,10 +19,13 @@ MAGENTA=\033[0;35m
 NC=\033[0m
 
 # Phony targets
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re val
 
 # Rules
 all: $(NAME)
+
+val: $(NAME)
+	valgrind $(VAL_FLAGS) ./$(NAME)
 
 $(NAME): $(OBJ)
 	@cd ./libft && $(MAKE) > /dev/null && $(MAKE) bonus > /dev/null && $(MAKE) printf > /dev/null
