@@ -6,7 +6,7 @@
 #    By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/02 19:23:02 by ael-mank          #+#    #+#              #
-#    Updated: 2024/01/26 10:32:18 by ael-mank         ###   ########.fr        #
+#    Updated: 2024/03/25 06:57:53 by ael-mank         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,7 @@ SRC_FILES = ft_atoi ft_isalnum ft_isdigit ft_memchr ft_memmove \
 				ft_isprint ft_memcmp ft_memset ft_putnbr_fd ft_strchr \
 				ft_strjoin ft_strlen ft_strnstr ft_substr ft_calloc \
 				ft_isascii ft_itoa ft_memcpy ft_putchar_fd ft_putstr_fd \
-				ft_strdup ft_strlcat ft_strmapi ft_strrchr ft_tolower \
+				ft_strdup ft_strlcat ft_strmapi ft_strrchr ft_tolower ft_isspace\
 				get_next_line
 				
 BONUS = ft_lstnew ft_lstadd_front ft_lstadd_back ft_lstsize ft_lstlast \
