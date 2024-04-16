@@ -1,18 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_init.c                                         :+:      :+:    :+:   */
+/*   ft_free_args.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/30 07:54:47 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/03/30 07:55:36 by ael-mank         ###   ########.fr       */
+/*   Created: 2024/04/16 11:33:42 by ael-mank          #+#    #+#             */
+/*   Updated: 2024/04/16 13:21:55 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	init_env(t_env *env, char **og_env)
+void	*ft_free_args(char **str)
 {
-	if 
+	int	i;
+
+	i = 0;
+	if (NULL == str || NULL == *str)
+		return (NULL);
+	while (str[i])
+		free(str[i++]);
+	free(str);
+	return (NULL);
 }

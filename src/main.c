@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:16:09 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/03 08:22:17 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/16 14:14:42 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,16 @@ int	check_exec_builtin(t_shell *shell)
 	else if (strcmp(args[0], "exit") == 0)
 	{
 		free(shell->line);
-		return (1);
+		free_env(shell->env);
+		ft_free_args(args);
+		exit(0);
 	}
 	else
+	{
+		ft_free_args(args);
 		return (1);
+	}
+	ft_free_args(args);
 	return (0);
 }
 
@@ -41,27 +47,7 @@ int	check_exec_builtin(t_shell *shell)
 
 void exec_cmd(t_shell *shell)
 {
-    pid_t   pid;
-    int     status;
-    char    *argv[] = {shell->line, NULL};  // Construct the argv array
-
-    pid = fork();
-    printf("im in exec_cmd\n");
-    if (pid == 0)
-    {
-        execve(shell->line, argv, shell->env);
-        perror("execve");
-        exit(1);
-    }
-    else if (pid < 0)
-    {
-        perror("fork");
-        exit(1);
-    }
-    else
-    {
-        waitpid(pid, &status, 0);
-    }
+	(void)shell;
 }
 
 void	mini_loop(t_shell *shell)
@@ -90,7 +76,7 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	shell = malloc(sizeof(t_shell));
-	shell->env = env;
+	init_env(env, shell);
 	setup_signals();
 	mini_loop(shell);
 	return (0);
