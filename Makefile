@@ -6,13 +6,15 @@ CFLAGS = -Wall -Wextra -Werror -Ilibft/include -Iinclude -Llibft
 SRC_FILES = main \
 			syntax_checking/check_syntax syntax_checking/syntax_utils \
 			signals/signal_handling \
-			builtins/ft_pwd builtins/ft_cd builtins/ft_echo builtins/ft_env
+			builtins/ft_pwd builtins/ft_cd builtins/ft_echo builtins/ft_env \
+			init/env_init \
+			utils/ft_free_args
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
 OBJ = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
 NAME = minishell
 MAKE := make
 VAL_HIDE	:= readline.hide
-VAL_FLAGS	:= --leak-check=full --show-leak-kinds=all --suppressions=$(VAL_HIDE)
+VAL_FLAGS	:= --leak-check=full --show-leak-kinds=all -s --suppressions=$(VAL_HIDE)
 
 
 GREEN=\033[0;32m
