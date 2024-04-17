@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:16:09 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/16 14:14:42 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/17 09:40:07 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 int	check_exec_builtin(t_shell *shell)
 {
-	char **args;
+	char	**args;
 
 	args = ft_split(shell->line, ' ');
 	if (strcmp(args[0], "pwd") == 0)
@@ -27,11 +27,11 @@ int	check_exec_builtin(t_shell *shell)
 		ft_cd(args);
 	else if (strcmp(args[0], "echo") == 0)
 		ft_echo(args);
+	else if (strcmp(args[0], "export") == 0)
+		ft_export(args, shell->env);
 	else if (strcmp(args[0], "exit") == 0)
 	{
-		free(shell->line);
-		free_env(shell->env);
-		ft_free_args(args);
+		ft_exit(shell, args);
 		exit(0);
 	}
 	else
@@ -43,9 +43,9 @@ int	check_exec_builtin(t_shell *shell)
 	return (0);
 }
 
-//marche pas
+// marche pas
 
-void exec_cmd(t_shell *shell)
+void	exec_cmd(t_shell *shell)
 {
 	(void)shell;
 }
@@ -60,7 +60,7 @@ void	mini_loop(t_shell *shell)
 		if (check_syntax_errors(shell->line))
 		{
 			free(shell->line);
-			continue;
+			continue ;
 		}
 		add_history(shell->line);
 		if (check_exec_builtin(shell))

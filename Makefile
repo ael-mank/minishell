@@ -6,7 +6,8 @@ CFLAGS = -Wall -Wextra -Werror -Ilibft/include -Iinclude -Llibft
 SRC_FILES = main \
 			syntax_checking/check_syntax syntax_checking/syntax_utils \
 			signals/signal_handling \
-			builtins/ft_pwd builtins/ft_cd builtins/ft_echo builtins/ft_env \
+			builtins/ft_pwd builtins/ft_cd builtins/ft_echo builtins/ft_env builtins/ft_export\
+			builtins/ft_exit \
 			init/env_init \
 			utils/ft_free_args
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))

@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 07:54:47 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/16 13:55:52 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/17 09:43:55 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,38 +16,32 @@ bool	init_env(char **envp, t_shell *shell)
 {
 	t_env	*env_var;
 	t_list	*env_var_node;
-    int     i;
+	int		i;
 	int		j;
 
-    i = -1;
+	i = -1;
 	shell->env = NULL;
 	while (envp[++i])
 	{
 		j = 0;
 		while (envp[i][j] != '=')
 			j++;
-		env_var = malloc(sizeof(t_env));
-		if (!env_var)
+		if (!(env_var = malloc(sizeof(t_env))))
 			return (0);
-		env_var->name = ft_substr(envp[i], 0, j);
-		if (!env_var->name)
+		if (!(env_var->name = ft_substr(envp[i], 0, j)))
 			return (0);
-		env_var->value = ft_strdup(&envp[i][j + 1]);
-		if (!env_var->value)
+		if (!(env_var->value = ft_strdup(&envp[i][j + 1])))
 			return (0);
-		env_var_node = ft_lstnew(env_var);
-		if (!env_var_node)
+		if (!(env_var_node = ft_lstnew(env_var)))
 			return (0);
 		ft_lstadd_back(&shell->env, env_var_node);
 	}
 	return (1);
 }
 
-//code free env
-
 void	free_env(t_list *env)
 {
-	t_list	*tmp;
+	t_list *tmp;
 
 	while (env)
 	{
