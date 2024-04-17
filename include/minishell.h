@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:36:17 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/17 10:05:35 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/17 12:07:18 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,13 @@ typedef struct s_shell
 }			t_shell;
 
 // INIT
-
 bool		init_env(char **env, t_shell *shell);
 void		free_env(t_list *env);
+
+// EXEC
+
+int		check_exec_builtin(t_shell *shell);
+void	exec_cmd(t_shell *shell);
 
 // Builtins
 int			ft_pwd(void);
@@ -62,7 +66,6 @@ const char	*skip_whitespace(const char *input);
 int			is_invalid_redirection(const char **input);
 
 // utils
-
 void		*ft_free_args(char **str);
 
 #endif
