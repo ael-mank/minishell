@@ -6,19 +6,19 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 07:38:11 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/05 07:38:16 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/17 13:13:52 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// ADD = init env as linked lists
-
 int	check_exec_builtin(t_shell *shell)
 {
-	char **args;
+	char	**args;
 
 	args = ft_split(shell->line, ' ');
+	if (!args)
+		return(1);
 	if (strcmp(args[0], "pwd") == 0)
 		ft_pwd();
 	else if (strcmp(args[0], "env") == 0)
@@ -27,39 +27,61 @@ int	check_exec_builtin(t_shell *shell)
 		ft_cd(args);
 	else if (strcmp(args[0], "echo") == 0)
 		ft_echo(args);
+	else if (strcmp(args[0], "export") == 0)
+		ft_export(args, shell->env);
 	else if (strcmp(args[0], "exit") == 0)
 	{
-		free(shell->line);
-		return (1);
+		ft_exit(shell, args);
+		exit(0);
 	}
 	else
+	{
+		ft_free_args(args);
 		return (1);
+	}
+	ft_free_args(args);
 	return (0);
 }
 
-//marche pas
-
-void exec_cmd(t_shell *shell)
+char    *match_env_var(char *name, int len, t_list *env)
 {
-    pid_t   pid;
-    int     status;
-    char    *argv[] = {shell->line, NULL};  // Construct the argv array
-
-    pid = fork();
-    printf("im in exec_cmd\n");
-    if (pid == 0)
-    {
-        execve(shell->line, argv, shell->env);
-        perror("execve");
-        exit(1);
-    }
-    else if (pid < 0)
-    {
-        perror("fork");
-        exit(1);
-    }
+    while (env && ft_strncmp(((t_env *)env->content)->name, name, len))
+        env = env->next;
+    if (!env || ft_strlen(((t_env *)env->content)->name) != (size_t)len)
+        return ("");
     else
-    {
-        waitpid(pid, &status, 0);
-    }
+        return (((t_env *)env->content)->value);
+}
+
+int try_command(char *cmd, char **path)
+{
+	int i;
+	char *full_path;
+	int status;
+
+	i = 0;
+	while (path[i])
+	{
+		full_path = ft_strjoin(path[i], cmd);
+		if (!full_path)
+			return (1);
+		status = execve(full_path, NULL, NULL);
+		free(full_path);
+		if (status == 0)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+void	exec_cmd(t_shell *shell)
+{
+	(void)shell;
+	return ;
+	char **path;
+
+	path = ft_split(match_env_var("PATH", 4, shell->env), ':');
+	if (!path)
+		return ;
+	try_command()
 }

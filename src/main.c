@@ -6,57 +6,19 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:16:09 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/17 10:05:09 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/17 14:56:26 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// ADD = init env as linked lists
-
-int	check_exec_builtin(t_shell *shell)
-{
-	char	**args;
-
-	args = ft_split(shell->line, ' ');
-	if (strcmp(args[0], "pwd") == 0)
-		ft_pwd();
-	else if (strcmp(args[0], "env") == 0)
-		print_env(shell->env);
-	else if (strcmp(args[0], "cd") == 0)
-		ft_cd(args);
-	else if (strcmp(args[0], "echo") == 0)
-		ft_echo(args);
-	else if (strcmp(args[0], "export") == 0)
-		ft_export(args, shell->env);
-	else if (strcmp(args[0], "exit") == 0)
-	{
-		ft_exit(shell, args);
-		exit(0);
-	}
-	else
-	{
-		ft_free_args(args);
-		return (1);
-	}
-	ft_free_args(args);
-	return (0);
-}
-
-// marche pas
-
-void	exec_cmd(t_shell *shell)
-{
-	(void)shell;
-}
-
-void	mini_loop(t_shell *shell)
+int	mini_loop(t_shell *shell)
 {
 	while (1)
 	{
 		shell->line = readline("minishell> ");
 		if (!shell->line)
-			break ;
+			return(0);
 		if (check_syntax_errors(shell->line))
 		{
 			free(shell->line);
@@ -67,6 +29,7 @@ void	mini_loop(t_shell *shell)
 			exec_cmd(shell);
 		free(shell->line);
 	}
+	return(1);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -78,6 +41,7 @@ int	main(int argc, char **argv, char **env)
 	shell = malloc(sizeof(t_shell));
 	init_env(env, shell);
 	setup_signals();
-	mini_loop(shell);
+	if(!mini_loop(shell))
+		ft_exit(shell, 0);
 	return (0);
 }
