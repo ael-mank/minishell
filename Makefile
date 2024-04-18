@@ -3,14 +3,18 @@ CC = gcc
 SRC_DIR = ./src/
 OBJ_DIR = ./obj/
 CFLAGS = -Wall -Wextra -Werror -Ilibft/include -Iinclude -Llibft
-SRC_FILES = main \
+SRC_FILES = main minishell_utils\
 			exec/exec \
 			syntax_checking/check_syntax syntax_checking/syntax_utils \
 			signals/signal_handling \
 			builtins/ft_pwd builtins/ft_cd builtins/ft_echo builtins/ft_env builtins/ft_export\
 			builtins/ft_exit \
 			init/env_init \
-			utils/ft_free_args utils/edit_env_val
+			utils/ft_free_args utils/edit_env_val \
+			parsing/pre_expand parsing/pre_expand_utils \
+			parsing/tokenizer parsing/tokenizer_utils \
+			parsing/token_parser parsing/token_parser_utils
+
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
 OBJ = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
 NAME = minishell
@@ -42,7 +46,7 @@ $(NAME): $(OBJ)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	@mkdir -p $(@D)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@ -D GNL=$(GNL)
 
 clean:
 	@$(RM) -rf $(OBJ_DIR)
