@@ -10,7 +10,7 @@ SRC_FILES = main \
 			builtins/ft_pwd builtins/ft_cd builtins/ft_echo builtins/ft_env builtins/ft_export\
 			builtins/ft_exit \
 			init/env_init \
-			utils/ft_free_args
+			utils/ft_free_args utils/edit_env_val
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
 OBJ = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
 NAME = minishell

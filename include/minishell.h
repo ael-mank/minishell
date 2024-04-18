@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:36:17 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/17 12:07:18 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/18 11:13:26 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	exec_cmd(t_shell *shell);
 
 // Builtins
 int			ft_pwd(void);
-int			ft_cd(char **args);
+int			ft_cd(char **args, t_list *env);
 int			ft_echo(char **args);
 void		print_env(t_list *env);
 void		ft_export(char **args, t_list *env);
@@ -67,5 +67,6 @@ int			is_invalid_redirection(const char **input);
 
 // utils
 void		*ft_free_args(char **str);
+void edit_env_value(t_list *env, char *name, char *new_value);
 
 #endif

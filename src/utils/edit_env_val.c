@@ -1,29 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_cd.c                                            :+:      :+:    :+:   */
+/*   edit_env_val.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/18 06:53:58 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/18 11:15:01 by ael-mank         ###   ########.fr       */
+/*   Created: 2024/04/18 10:32:25 by ael-mank          #+#    #+#             */
+/*   Updated: 2024/04/18 11:06:19 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_cd(char **args, t_list *env)
+void edit_env_value(t_list *env, char *name, char *new_value)
 {
-	char *old_pwd;
-
-	old_pwd = getcwd(NULL, 0);
-	if (args[1] == NULL)
-		fprintf(stderr, "ft_cd: expected argument\n");
-	else
-	{
-		edit_env_value(env, "OLDPWD", old_pwd);
-		if (chdir(args[1]) != 0)
-			perror("ft_cd");
-	}
-	return (1);
+    while (env)
+    {
+        t_env *env_var = (t_env *)env->content;
+        if (strcmp(env_var->name, name) == 0)
+        {
+            free(env_var->value);
+            env_var->value = strdup(new_value);
+            if (!env_var->value)
+				return ;
+            break;
+        }
+        env = env->next;
+    }
 }
