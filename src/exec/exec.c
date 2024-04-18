@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 07:38:11 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/18 13:00:23 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/18 15:20:25 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,7 @@ int	check_exec_builtin(t_ms *shell)
 	else if (strcmp(args[0], "exit") == 0)
 		ft_exit(shell);
 	else
-	{
-		ft_free_args(args);
 		return (1);
-	}
 	// ft_free_args(args);
 	return (0);
 }
