@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:16:09 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/18 12:55:14 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/18 15:58:01 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,12 @@ void	shell_routine(void)
 
 	while (1)
 	{
-		// if (GNL == 0)
-		line = readline("minishell> ");
-		// // else
-		// 	line = get_next_line(0);
+		char *(user) = match_env_var("USER", 4);
+		char *(pwd) = getcwd(NULL, 0);
+		char *(prompt) = ft_strjoin(user, "@");
+		prompt = ft_strjoin(prompt, pwd);
+		prompt = ft_strjoin(prompt, " $ ");
+		line = readline(prompt);
 		if (!line)
 			break ;
 		if (empty_line(line))
