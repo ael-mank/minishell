@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 09:37:20 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/17 09:40:15 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/18 15:17:04 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	ft_exit(t_ms *shell)
 {
+	ft_printf("exit\n");
 	free_cmd_list();
 	free_env(shell->env);
 	exit(0);
