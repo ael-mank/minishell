@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 06:53:58 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/18 11:15:01 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/18 11:23:43 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	ft_cd(char **args, t_list *env)
 	else
 	{
 		edit_env_value(env, "OLDPWD", old_pwd);
+		free(old_pwd);
 		if (chdir(args[1]) != 0)
 			perror("ft_cd");
 	}

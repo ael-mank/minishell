@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:16:09 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/17 14:56:26 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/18 11:27:13 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@ int	mini_loop(t_shell *shell)
 		shell->line = readline("minishell> ");
 		if (!shell->line)
 			return(0);
+		if (ft_strlen(shell->line) == 0)
+		{
+			free(shell->line);
+			continue;
+		}
 		if (check_syntax_errors(shell->line))
 		{
 			free(shell->line);
