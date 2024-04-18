@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 07:38:11 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/18 11:13:50 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/18 13:00:23 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,45 +41,10 @@ int	check_exec_builtin(t_shell *shell)
 	return (0);
 }
 
-char	*match_env_var(char *name, int len, t_list *env)
-{
-	while (env && ft_strncmp(((t_env *)env->content)->name, name, len))
-		env = env->next;
-	if (!env || ft_strlen(((t_env *)env->content)->name) != (size_t)len)
-		return ("");
-	else
-		return (((t_env *)env->content)->value);
-}
-
-// int	try_command(char *cmd, char **path)
-// {
-// 	int		i;
-// 	char	*full_path;
-// 	int		status;
-
-// 	i = 0;
-// 	while (path[i])
-// 	{
-// 		full_path = ft_strjoin(path[i], cmd);
-// 		if (!full_path)
-// 			return (1);
-// 		status = execve(full_path, NULL, NULL);
-// 		free(full_path);
-// 		if (status == 0)
-// 			return (0);
-// 		i++;
-// 	}
-// 	return (1);
-// }
-
 void	exec_cmd(t_shell *shell)
 {
-	// char	**path;
+
 
 	(void)shell;
-	// return ;
-	// path = ft_split(match_env_var("PATH", 4, shell->env), ':');
-	// if (!path)
-	// 	return ;
-	// try_command();
+
 }
