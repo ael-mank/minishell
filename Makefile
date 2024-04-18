@@ -3,7 +3,11 @@ CC = gcc
 SRC_DIR = ./src/
 OBJ_DIR = ./obj/
 CFLAGS = -Wall -Wextra -Werror -Ilibft/include -Iinclude -Llibft
-SRC_FILES = main \
+SRC_FILES = main minishell minishell_utils \
+			parsing/syntax_checker parsing/syntax_checker_utils \
+			parsing/tokenizer parsing/tokenizer_utils \
+			parsing/token_parser parsing/token_parser_utils \
+			parsing/pre_expand parsing/pre_expand_utils \
 			syntax_checking/check_syntax syntax_checking/syntax_utils \
 			signals/signal_handling \
 			builtins/ft_pwd builtins/ft_cd builtins/ft_echo builtins/ft_env
@@ -13,7 +17,7 @@ NAME = minishell
 MAKE := make
 VAL_HIDE	:= readline.hide
 VAL_FLAGS	:= --leak-check=full --show-leak-kinds=all --suppressions=$(VAL_HIDE)
-
+GNL	= 0
 
 GREEN=\033[0;32m
 YELLOW=\033[0;33m
@@ -38,7 +42,7 @@ $(NAME): $(OBJ)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	@mkdir -p $(@D)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@ -D GNL=$(GNL)
 
 clean:
 	@$(RM) -rf $(OBJ_DIR)
