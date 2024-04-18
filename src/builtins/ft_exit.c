@@ -12,11 +12,9 @@
 
 #include "minishell.h"
 
-// void	ft_exit(t_shell *shell, char **args)
-// {
-// 	free(shell->line);
-// 	free_env(shell->env);
-// 	ft_free_args(args);
-// 	free(shell);
-// 	return ;
-// }
+void	ft_exit(t_ms *shell)
+{
+	free_cmd_list();
+	free_env(shell->env);
+	exit(0);
+}

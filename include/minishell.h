@@ -151,8 +151,7 @@ int			ft_cd(char **args, t_list *env);
 int			ft_echo(char **args);
 void		print_env(t_list *env);
 void		ft_export(char **args, t_list *env);
-// void		ft_exit(t_shell *shell, char **args);
-void	ft_exit(void);
+void		ft_exit(t_ms *shell);
 
 // Signals
 void		setup_signals(void);
