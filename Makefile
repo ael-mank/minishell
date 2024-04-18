@@ -4,15 +4,19 @@ SRC_DIR = ./src/
 OBJ_DIR = ./obj/
 CFLAGS = -Wall -Wextra -Werror -Ilibft/include -Iinclude -Llibft
 SRC_FILES = main \
+			exec/exec \
 			syntax_checking/check_syntax syntax_checking/syntax_utils \
 			signals/signal_handling \
-			builtins/ft_pwd builtins/ft_cd builtins/ft_echo builtins/ft_env
+			builtins/ft_pwd builtins/ft_cd builtins/ft_echo builtins/ft_env builtins/ft_export\
+			builtins/ft_exit \
+			init/env_init \
+			utils/ft_free_args utils/edit_env_val
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
 OBJ = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
 NAME = minishell
 MAKE := make
 VAL_HIDE	:= readline.hide
-VAL_FLAGS	:= --leak-check=full --show-leak-kinds=all --suppressions=$(VAL_HIDE)
+VAL_FLAGS	:= --leak-check=full --show-leak-kinds=all -s --suppressions=$(VAL_HIDE)
 
 
 GREEN=\033[0;32m

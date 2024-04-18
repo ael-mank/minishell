@@ -6,19 +6,23 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 06:53:58 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/03/25 06:58:17 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/18 11:23:43 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_cd(char **args)
+int	ft_cd(char **args, t_list *env)
 {
-	//AJOUTER UPDATE OLD_PWD
+	char *old_pwd;
+
+	old_pwd = getcwd(NULL, 0);
 	if (args[1] == NULL)
 		fprintf(stderr, "ft_cd: expected argument\n");
 	else
 	{
+		edit_env_value(env, "OLDPWD", old_pwd);
+		free(old_pwd);
 		if (chdir(args[1]) != 0)
 			perror("ft_cd");
 	}

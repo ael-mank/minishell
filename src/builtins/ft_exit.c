@@ -1,26 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/18 07:04:36 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/16 14:21:23 by ael-mank         ###   ########.fr       */
+/*   Created: 2024/04/17 09:37:20 by ael-mank          #+#    #+#             */
+/*   Updated: 2024/04/17 09:40:15 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	print_env(t_list *env)
+void	ft_exit(t_shell *shell, char **args)
 {
-	t_list	*tmp;
-
-	tmp = env;
-	while (tmp)
-	{
-		ft_printf("%s=%s\n", ((t_env *)tmp->content)->name,
-			((t_env *)tmp->content)->value);
-		tmp = tmp->next;
-	}
+	free(shell->line);
+	free_env(shell->env);
+	ft_free_args(args);
+	free(shell);
+	return ;
 }
