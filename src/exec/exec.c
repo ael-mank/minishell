@@ -30,11 +30,7 @@ int	check_exec_builtin(t_ms *shell)
 	else if (strcmp(args[0], "export") == 0)
 		ft_export(args, shell->env);
 	else if (strcmp(args[0], "exit") == 0)
-	{
-		free_cmd_list();
-		free_env(shell->env);
-		exit(0);
-	}
+		ft_exit(shell);
 	else
 	{
 		ft_free_args(args);
