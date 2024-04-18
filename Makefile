@@ -46,7 +46,7 @@ $(NAME): $(OBJ)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	@mkdir -p $(@D)
-	@$(CC) $(CFLAGS) -c $< -o $@ -D GNL=$(GNL)
+	@$(CC) $(CFLAGS) -c $< -o $@ 
 
 clean:
 	@$(RM) -rf $(OBJ_DIR)
