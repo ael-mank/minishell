@@ -1,26 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
+/*   edit_env_val.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/18 07:04:36 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/16 14:21:23 by ael-mank         ###   ########.fr       */
+/*   Created: 2024/04/18 10:32:25 by ael-mank          #+#    #+#             */
+/*   Updated: 2024/04/18 11:06:19 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	print_env(t_list *env)
+void edit_env_value(t_list *env, char *name, char *new_value)
 {
-	t_list	*tmp;
-
-	tmp = env;
-	while (tmp)
-	{
-		ft_printf("%s=%s\n", ((t_env *)tmp->content)->name,
-			((t_env *)tmp->content)->value);
-		tmp = tmp->next;
-	}
+    while (env)
+    {
+        t_env *env_var = (t_env *)env->content;
+        if (strcmp(env_var->name, name) == 0)
+        {
+            free(env_var->value);
+            env_var->value = strdup(new_value);
+            if (!env_var->value)
+				return ;
+            break;
+        }
+        env = env->next;
+    }
 }
