@@ -125,3 +125,52 @@ int	check_syntax_errors(const char *input)
 	}
 	return (0);
 }
+
+char	*trim_line(char *str)
+{
+    int     i_start;
+    int     i_end;
+	char	*trimmed;
+
+    if (!str)
+        return (NULL);
+    if (ft_strlen(str) == 0)
+        return (ft_strdup(str));
+    i_start = 0;
+    i_end = ft_strlen(str) - 1;
+    while (str[i_start] && ft_isspace(str[i_start]))
+        i_start++;
+    while (i_end && ft_isspace(str[i_end]))
+        i_end--;
+    if (i_start > i_end) // str has only whitespaces
+        trimmed = malloc(1);
+    else
+        trimmed = malloc(i_end - i_start + 2);
+    if (!trimmed)
+        return (NULL);
+    if (i_start > i_end)
+        trimmed[0] = '\0';
+    else
+        ft_strlcpy(trimmed, &str[i_start], i_end - i_start + 2);
+    return (trimmed);
+}
+
+t_token	*check_syntax_and_tokenize(char *line)
+{
+	char	*trimmed_line;
+	t_token	*tokens;
+
+	trimmed_line = trim_line(line);
+	tokens = NULL;
+	free(line);
+	if (!trimmed_line)
+		return (NULL);
+	if (check_syntax_errors(trimmed_line))
+	{
+		free(trimmed_line);
+		return (NULL);
+	}
+	tokens = tokenize(trimmed_line);
+	free(trimmed_line);
+	return (tokens);
+}

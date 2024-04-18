@@ -32,7 +32,7 @@ t_env	*create_env_var(char *envp)
 	return (env_var);
 }
 
-bool	init_env(char **envp, t_shell *shell)
+bool	init_env(char **envp, t_ms *shell)
 {
 	int		i;
 	t_env	*env_var;

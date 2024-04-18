@@ -76,7 +76,7 @@ typedef struct s_ms
 
 
 /* main process */
-void	free_env(t_list *env);
+// void	free_env(t_list *env);
 void	shell_routine(void);
 t_ms	*get_ms(void);
 int		empty_line(char *line);
@@ -137,13 +137,13 @@ typedef struct s_shell
 }			t_shell;
 
 // INIT
-bool		init_env(char **env, t_shell *shell);
+bool		init_env(char **env, t_ms *shell);
 void		free_env(t_list *env);
 
 // EXEC
 
-int		check_exec_builtin(t_shell *shell);
-void	exec_cmd(t_shell *shell);
+int		check_exec_builtin(t_ms *shell);
+void	exec_cmd(t_ms *shell);
 
 // Builtins
 int			ft_pwd(void);
@@ -151,7 +151,8 @@ int			ft_cd(char **args, t_list *env);
 int			ft_echo(char **args);
 void		print_env(t_list *env);
 void		ft_export(char **args, t_list *env);
-void		ft_exit(t_shell *shell, char **args);
+// void		ft_exit(t_shell *shell, char **args);
+void	ft_exit(void);
 
 // Signals
 void		setup_signals(void);

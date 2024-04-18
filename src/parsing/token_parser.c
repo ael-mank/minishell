@@ -115,6 +115,8 @@ bool    parse_tokens(t_token *tokens)
         return (0);
     }
     free_tokens(&tokens);
+    if (check_exec_builtin(ms))
+		exec_cmd(ms);
     print_cmd_list(ms->cmds);
     return (1);
 }

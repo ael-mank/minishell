@@ -12,9 +12,11 @@
 
 #include "minishell.h"
 
-int	check_exec_builtin(t_shell *shell)
+int	check_exec_builtin(t_ms *shell)
 {
-	char **(args) = ft_split(shell->line, ' ');
+	t_cmd	*cmd = shell->cmds->content;
+	char	**args = cmd->cmd_arr;
+
 	if (!args)
 		return (1);
 	if (strcmp(args[0], "pwd") == 0)
@@ -29,7 +31,8 @@ int	check_exec_builtin(t_shell *shell)
 		ft_export(args, shell->env);
 	else if (strcmp(args[0], "exit") == 0)
 	{
-		ft_exit(shell, args);
+		free_cmd_list();
+		free_env(shell->env);
 		exit(0);
 	}
 	else
@@ -37,11 +40,11 @@ int	check_exec_builtin(t_shell *shell)
 		ft_free_args(args);
 		return (1);
 	}
-	ft_free_args(args);
+	// ft_free_args(args);
 	return (0);
 }
 
-void	exec_cmd(t_shell *shell)
+void	exec_cmd(t_ms *shell)
 {
 
 

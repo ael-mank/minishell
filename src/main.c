@@ -19,10 +19,10 @@ void	shell_routine(void)
 
 	while (1)
 	{
-		if (GNL == 0)
-			line = readline("minishell> ");
-		else
-			line = get_next_line(0);
+		// if (GNL == 0)
+		line = readline("minishell> ");
+		// // else
+		// 	line = get_next_line(0);
 		if (!line)
 			break ;
 		if (empty_line(line))
