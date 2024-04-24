@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 07:38:11 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/18 15:20:25 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/24 12:35:15 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,17 @@ int	check_exec_builtin(t_ms *shell)
 
 	if (!args)
 		return (1);
-	if (strcmp(args[0], "pwd") == 0)
+	if (ft_strncmp("pwd", args[0], 3) == 0)
 		ft_pwd();
-	else if (strcmp(args[0], "env") == 0)
+	else if (ft_strncmp("env", args[0], 3) == 0)
 		print_env(shell->env);
-	else if (strcmp(args[0], "cd") == 0)
+	else if (ft_strncmp("cd", args[0], 2) == 0)
 		ft_cd(args, shell->env);
-	else if (strcmp(args[0], "echo") == 0)
+	else if (ft_strncmp("echo", args[0], 4) == 0)
 		ft_echo(args);
-	else if (strcmp(args[0], "export") == 0)
+	else if (ft_strncmp("export", args[0], 6) == 0)
 		ft_export(args, shell->env);
-	else if (strcmp(args[0], "exit") == 0)
+	else if (ft_strncmp("exit", args[0], 4) == 0)
 		ft_exit(shell);
 	else
 		return (1);
