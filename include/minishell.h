@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:36:17 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/18 12:58:08 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/24 14:11:45 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,7 @@ int			ft_echo(char **args);
 void		print_env(t_list *env);
 void		ft_export(char **args, t_list *env);
 void		ft_exit(t_ms *shell);
+void 		ft_unset(char **args, t_list *env);
 
 // Signals
 void		setup_signals(void);

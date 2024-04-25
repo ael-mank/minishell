@@ -6,11 +6,25 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:22:08 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/17 10:30:40 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/24 12:55:55 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int is_name_valid(const char *name)
+{
+	if (!name)
+		return(0);
+	int (i) = 0;
+	while (name[i])
+	{
+		if (!ft_isalnum(name[i]))
+			return(0);
+		i++;
+	}
+	return(1);
+}
 
 void	ft_export(char **args, t_list *env)
 {
@@ -19,7 +33,7 @@ void	ft_export(char **args, t_list *env)
 	char **name_value;
 	
 	name_value = ft_split(args[1], '=');
-	if (!name_value[0] || !name_value[1])
+	if (!is_name_valid(name_value[0]) || !name_value[1])
 	{
 		ft_free_args(name_value);
 		return ;
