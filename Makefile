@@ -8,7 +8,7 @@ SRC_FILES = main minishell_utils\
 			syntax_checking/check_syntax syntax_checking/syntax_utils \
 			signals/signal_handling \
 			builtins/ft_pwd builtins/ft_cd builtins/ft_echo builtins/ft_env builtins/ft_export\
-			builtins/ft_exit \
+			builtins/ft_exit builtins/ft_unset\
 			init/env_init \
 			utils/ft_free_args utils/edit_env_val \
 			parsing/pre_expand parsing/pre_expand_utils \

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_tokens.c                                     :+:      :+:    :+:   */
+/*   token_parser.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrigny <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:19:48 by yrigny            #+#    #+#             */
-/*   Updated: 2024/04/03 16:20:02 by yrigny           ###   ########.fr       */
+/*   Updated: 2024/04/24 12:36:09 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,6 @@ bool    parse_tokens(t_token *tokens)
     free_tokens(&tokens);
     if (check_exec_builtin(ms))
 		exec_cmd(ms);
-    print_cmd_list(ms->cmds);
+    //print_cmd_list(ms->cmds);
     return (1);
 }
