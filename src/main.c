@@ -35,12 +35,6 @@ void	shell_routine(void)
 			continue ;
 		parse_tokens(tokens);
 		free_cmd_list();
-		// if (!g_signal)
-		// {
-		// 	exec_list = parse_tokens(&tokens);
-		// 	execution_manager(exec_list, env, &status);
-		// 	free_exec_list(exec_list);
-		// }
 		// update_env_status(env, status, "=?");
 	}
 	rl_clear_history();
