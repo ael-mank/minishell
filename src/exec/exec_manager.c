@@ -2,16 +2,16 @@
 
 void	exec_manager(void)
 {
-	t_ms	*ms;
-	t_list	*cmds;
+    t_ms	*ms;
+    t_list	*cmds;
 
-	ms = get_ms();
-	cmds = ms->cmds;
-	if (ft_lstsize(cmds) == 1)
-		single_cmd_exec(cmds->content);
-	else
-		pipex(ms, cmds);
-	// clean tmp heredoc files
+    ms = get_ms();
+    cmds = ms->cmds;
+    if (ft_lstsize(cmds) == 1)
+        single_cmd_exec(cmds->content);
+    else
+        pipex(ms, cmds);
+    // clean tmp heredoc files
 }
 
 void    single_cmd_exec(t_cmd *cmd)
@@ -21,6 +21,11 @@ void    single_cmd_exec(t_cmd *cmd)
 
 	if (!ft_strncmp(cmd->cmd_arr[0], "exit", 5))
 		ft_exit(get_ms());
+	if (!ft_strncmp(cmd->cmd_arr[0], "cd", 3))
+	{
+		ft_cd(cmd->cmd_arr, get_ms()->env);
+		return;
+	}
     pid = fork();
     if (pid == 0)
     {

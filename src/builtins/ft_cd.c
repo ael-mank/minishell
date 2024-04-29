@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 06:53:58 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/29 15:27:59 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/30 00:40:24 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	ft_cd(char **args, t_list *env)
 {
 	char	*old_pwd;
+	char	*pwd;
 
 	old_pwd = getcwd(NULL, 0);
 	if (args[1] == NULL)
@@ -23,6 +24,9 @@ int	ft_cd(char **args, t_list *env)
 		free(old_pwd);
 		if (chdir("/home") != 0)
 			perror("ft_cd");
+		pwd = getcwd(NULL, 0);
+		edit_env_value(env, "PWD", pwd);
+		free(pwd);
 	}
 	else
 	{
@@ -30,6 +34,9 @@ int	ft_cd(char **args, t_list *env)
 		free(old_pwd);
 		if (chdir(args[1]) != 0)
 			perror("ft_cd");
+		pwd = getcwd(NULL, 0);
+		edit_env_value(env, "PWD", pwd);
+		free(pwd);
 	}
 	return (1);
 }

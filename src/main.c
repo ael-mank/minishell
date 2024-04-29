@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:16:09 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/22 10:44:26 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/30 00:18:55 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int	main(int argc, char **argv, char **envp)
 	// g_signal = 0;
 	if (init_env(envp, ms) == FAILURE)
 		return (FAILURE);
+	setup_signals();
 	// ms->curr_dir = get_curr_dir();
 	shell_routine();
 	free_env(ms->env);
