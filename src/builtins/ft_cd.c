@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 06:53:58 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/18 15:45:03 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/29 10:47:07 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_cd(char **args, t_list *env)
 {
-	char *old_pwd;
+	char	*old_pwd;
 
 	old_pwd = getcwd(NULL, 0);
 	if (args[1] == NULL)

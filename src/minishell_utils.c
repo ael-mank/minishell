@@ -27,7 +27,7 @@ t_ms	*get_ms(void)
 // 	return (ms->cmds);
 // }
 
-int		empty_line(char *line)
+int	empty_line(char *line)
 {
 	char	*temp;
 
@@ -41,4 +41,3 @@ int		empty_line(char *line)
 	}
 	return (0);
 }
-

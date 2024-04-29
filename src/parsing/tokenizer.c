@@ -62,7 +62,7 @@ t_token	*new_metacharacter(char *start, char **end)
 	if (*start == '>' && (*end - start == 2))
 		new = new_token(TOKEN_REDIR_APPEND, ">>");
 	if (*start == '|')
-	    new = new_token(TOKEN_PIPE, "|");
+		new = new_token(TOKEN_PIPE, "|");
 	while (**end && ft_isspace(**end))
 		(*end)++;
 	return (new);
