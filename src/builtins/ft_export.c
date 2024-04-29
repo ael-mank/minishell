@@ -27,7 +27,7 @@ int	is_name_valid(const char *name)
 {
 	if (!name)
 		return (0);
-	int (i) = 0;
+	int(i) = 0;
 	while (name[i])
 	{
 		if (!ft_isalnum_name(name[i]))

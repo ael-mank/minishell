@@ -14,8 +14,8 @@
 
 int	ft_echo(char **args)
 {
-	int (i) = 1;
-	int (n) = 0;
+	int(i) = 1;
+	int(n) = 0;
 	while (ft_strncmp("-n", args[i], 2) == 0)
 	{
 		n = 1;

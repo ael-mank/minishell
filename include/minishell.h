@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:36:17 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/29 10:52:57 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/29 15:23:40 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,10 @@
 
 # define SUCCESS 1
 # define FAILURE 0
+
+# ifndef MAX_PIPE
+#  define MAX_PIPE 1024
+# endif
 
 typedef enum e_token_type
 {
@@ -64,16 +68,22 @@ typedef struct s_env
     char    *value;
 }   t_env;
 
+typedef struct s_pipe
+{
+    int     fd[2];
+    pid_t   pid;
+}   t_pipe;
+
 typedef struct s_ms
 {
     char    *curr_dir; // why this?
     t_list  *env;
     t_list  *cmds;
     pid_t   pids[1024];
+	t_pipe  pipe[MAX_PIPE];
     int     last_exit;
     pid_t   last_pipe_pid; // what's this?
 }   t_ms;
-
 
 /* main process */
 // void	free_env(t_list *env);
@@ -93,6 +103,27 @@ bool	has_misplaced_oparator(char *line);
 void	skip_space(char **line);
 void	skip_quoted(char **line);
 void	syntax_error_pos(char *pos);
+
+/* execution */
+void	exec_manager(void);
+void    single_cmd_exec(t_cmd *cmd);
+void    pipex(t_ms *ms, t_list *cmds);
+void    fork_children(int nb_cmds, t_pipe pipe_arr[MAX_PIPE], t_list *cmds);
+void	child_first(t_cmd *child, int pipe[2]);
+void	child_middle(t_cmd *child, int pipe1[2], int pipe2[2]);
+void	child_last(t_cmd *child, int pipe[2]);
+bool    cmd_exists(t_cmd *child);
+bool	cmd_is_executable(t_cmd *child);
+void	execute_cmd(t_cmd *child);
+void	exec_builtin(t_cmd *child);
+void	catch_last_status(int *status);
+
+/* pre-execution */
+void    handle_redirections(t_list *cmds);
+void    handle_redir_in(t_cmd *cmd);
+int     receive_heredoc(char *delimiter, char *filename);
+char    *gen_unique_filename(unsigned long p);
+void    handle_redir_out(t_cmd *cmd);
 
 /* tokenization */
 t_token	*tokenize(char *line);
@@ -143,7 +174,7 @@ void		free_env(t_list *env);
 // EXEC
 
 int		check_exec_builtin(t_ms *shell);
-void	exec_cmd(t_ms *shell);
+void	exec_cmd(void);
 
 // Builtins
 int			ft_pwd(void);
@@ -165,6 +196,7 @@ const char	*skip_whitespace(const char *input);
 int			is_invalid_redirection(const char **input);
 
 // utils
+bool    is_builtin(char *cmd_name);
 void		*ft_free_args(char **str);
 void edit_env_value(t_list *env, char *name, char *new_value);
 char	*trim_line(char *str);

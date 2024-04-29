@@ -11,6 +11,7 @@
 // 10. add signals handler
 // 11. debug builtins
 // 12. clean tmp heredoc files after each line executed
-// 13. replace current prompt with customized prompt ("user:cwd$ ")
+// 13. (OK) replace current prompt with customized prompt ("user:cwd$ ")
 // 14. fix bug with str replacement of "$?"
 // 14. norminettes
+// 15. FIX CD

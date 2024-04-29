@@ -15,7 +15,7 @@
 void	edit_env_value(t_list *env, char *name, char *new_value)
 {
 	t_env	*env_var;
-	
+
 	while (env)
 	{
 		env_var = (t_env *)env->content;

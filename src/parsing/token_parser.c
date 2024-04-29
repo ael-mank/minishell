@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:19:48 by yrigny            #+#    #+#             */
-/*   Updated: 2024/04/29 10:44:27 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/29 15:07:53 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,6 @@ bool	parse_tokens(t_token *tokens)
 		return (0);
 	}
 	free_tokens(&tokens);
-	if (check_exec_builtin(ms))
-		exec_cmd(ms);
+	exec_manager();
 	return (1);
 }
