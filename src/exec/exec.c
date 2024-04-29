@@ -14,9 +14,11 @@
 
 int	check_exec_builtin(t_ms *shell)
 {
-	t_cmd	*cmd = shell->cmds->content;
-	char	**args = cmd->cmd_arr;
+	t_cmd	*cmd;
+	char	**args;
 
+	cmd = shell->cmds->content;
+	args = cmd->cmd_arr;
 	if (!args)
 		return (1);
 	if (ft_strncmp("pwd", args[0], 3) == 0)
@@ -41,8 +43,5 @@ int	check_exec_builtin(t_ms *shell)
 
 void	exec_cmd(t_ms *shell)
 {
-
-
 	(void)shell;
-
 }

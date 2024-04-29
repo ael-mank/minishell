@@ -12,35 +12,40 @@
 
 #include "minishell.h"
 
-void shell_routine(void)
+void	shell_routine(void)
 {
-    char *line;
-    t_token *tokens;
+	char	*line;
+	t_token	*tokens;
+	char	*user;
+	char	*pwd;
+	char	*prompt;
+	char	*tempPrompt;
+	char	*finalPrompt;
 
-    while (1)
-    {
-        char *user = match_env_var("USER", 4);
-        char *pwd = getcwd(NULL, 0);
-        char *prompt = ft_strjoin(user, "@");
-        char *tempPrompt = ft_strjoin(prompt, pwd);
-        free(prompt);
-        free(pwd);
-        char *finalPrompt = ft_strjoin(tempPrompt, " $ ");
-        free(tempPrompt);
-        line = readline(finalPrompt);
-        free(finalPrompt);
-        if (!line)
-            break;
-        if (empty_line(line))
-            continue;
-        add_history(line);
-        tokens = check_syntax_and_tokenize(line);
-        if (!tokens)
-            continue;
-        parse_tokens(tokens);
-        free_cmd_list();
-    }
-    rl_clear_history();
+	while (1)
+	{
+		user = match_env_var("USER", 4);
+		pwd = getcwd(NULL, 0);
+		prompt = ft_strjoin(user, "@");
+		tempPrompt = ft_strjoin(prompt, pwd);
+		free(prompt);
+		free(pwd);
+		finalPrompt = ft_strjoin(tempPrompt, " $ ");
+		free(tempPrompt);
+		line = readline(finalPrompt);
+		free(finalPrompt);
+		if (!line)
+			break ;
+		if (empty_line(line))
+			continue ;
+		add_history(line);
+		tokens = check_syntax_and_tokenize(line);
+		if (!tokens)
+			continue ;
+		parse_tokens(tokens);
+		free_cmd_list();
+	}
+	rl_clear_history();
 }
 
 int	main(int argc, char **argv, char **envp)

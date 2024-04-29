@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 17:48:25 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/03/18 06:58:06 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/29 10:46:08 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	err(const char *msg, int ret)
 
 int	ft_pwd(void)
 {
-	char *path;
+	char	*path;
 
 	path = getcwd(NULL, 0);
 	if (!path)

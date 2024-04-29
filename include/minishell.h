@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:36:17 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/24 14:11:45 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/29 10:52:57 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,5 +167,7 @@ int			is_invalid_redirection(const char **input);
 // utils
 void		*ft_free_args(char **str);
 void edit_env_value(t_list *env, char *name, char *new_value);
+char	*trim_line(char *str);
+int	has_unclosed_quotes(const char *input);
 
 #endif
