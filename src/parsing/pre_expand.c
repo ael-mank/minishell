@@ -38,20 +38,34 @@ void	expand_env_var(t_list **cmd_arg, int head)
 
 	old_str = (char *)((*cmd_arg)->content);
 	end = head + 1;
-	while (ft_isalnum(old_str[end + 1]) || old_str[end + 1] == '_')
-		end++;
+    if (old_str[end] != '?')
+    {
+        while (ft_isalnum(old_str[end + 1]) || old_str[end + 1] == '_')
+            end++;
+    }
 	env_var_value = match_env_var(&old_str[head + 1], end - head);
-	// printf("env_var_value: [%s]\n", env_var_value);
 	new_str = assemble_new_str(old_str, env_var_value, head, end);
 	free(old_str);
-	// printf("new str: %s\n", new_str);
 	(*cmd_arg)->content = new_str;
 }
 
 char	*match_env_var(char *name, int len)
 {
 	t_list	*env;
+	int     last_exit;
 
+    if (len == 1 && !ft_strncmp(name, "?", 2))
+    {
+        last_exit = get_ms()->last_exit;
+        if (last_exit == 0)
+            return ("0");
+        if (last_exit == 1)
+            return ("1");
+        if (last_exit == 126)
+            return ("126");
+        if (last_exit == 127)
+            return ("127");
+    }
 	env = get_ms()->env;
 	while (env && ft_strncmp(((t_env *)env->content)->name, name, len))
 		env = env->next;
