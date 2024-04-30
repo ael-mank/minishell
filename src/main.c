@@ -30,7 +30,7 @@ void	shell_routine(void)
 		tempPrompt = ft_strjoin(prompt, pwd);
 		free(prompt);
 		free(pwd);
-		finalPrompt = ft_strjoin(tempPrompt, " $ ");
+		finalPrompt = ft_strjoin(tempPrompt, "$ ");
 		free(tempPrompt);
 		line = readline(finalPrompt);
 		free(finalPrompt);
@@ -50,17 +50,15 @@ void	shell_routine(void)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_ms *ms;
+	t_ms	*ms;
 
 	(void)argc;
 	(void)argv;
 	ms = get_ms();
 	// g_signal = 0;
-	if (init_env(envp, ms) == FAILURE)
-		return (FAILURE);
-	setup_signals();
-	// ms->curr_dir = get_curr_dir();
+	if (init_env(envp, ms) == 0)
+		return (EXIT_FAILURE);
 	shell_routine();
-	free_env(ms->env);
-	return (SUCCESS);
+	free_env();
+	return (EXIT_SUCCESS);
 }
