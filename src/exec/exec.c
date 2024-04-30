@@ -70,6 +70,6 @@ int		exec_builtin(t_cmd *child)
 	else if (!ft_strncmp(cmd_name, "env", 4))
 		exit_code = print_env(ms->env);
 	else if (!ft_strncmp(cmd_name, "exit", 5))
-        	ft_exit(ms);
+        	ft_exit();
 	return (exit_code);
 }

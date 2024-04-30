@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:36:17 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/29 15:23:40 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/30 21:02:53 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void	child_last(t_cmd *child, int pipe[2]);
 bool    cmd_exists(t_cmd *child);
 bool	cmd_is_executable(t_cmd *child);
 void	execute_child(t_cmd *child);
-void	exec_builtin(t_cmd *child);
+int		exec_builtin(t_cmd *child);
 void	child_free_exit(int exit_code);
 
 /* pre-execution */
@@ -168,10 +168,10 @@ void	    free_env(void);
 int			ft_pwd(void);
 int			ft_cd(char **args, t_list *env);
 int			ft_echo(char **args);
-void		print_env(t_list *env);
-void		ft_export(char **args, t_list *env);
-void		ft_exit(t_ms *shell);
-void 		ft_unset(char **args, t_list *env);
+int			print_env(t_list *env);
+int			ft_export(char **args, t_list *env);
+void		ft_exit(void);
+int 		ft_unset(char **args, t_list *env);
 
 // Signals
 void		setup_signals(void);
