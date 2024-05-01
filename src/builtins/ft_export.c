@@ -12,17 +12,6 @@
 
 #include "minishell.h"
 
-int	ft_isalnum_name(int c)
-{
-	if (c == '_')
-		return (1);
-	if (((c >= 48) && (c <= 57)) || ((c >= 65) && (c <= 90)) || ((c >= 97)
-			&& (c <= 122)))
-		return (1);
-	else
-		return (0);
-}
-
 int	is_name_valid(const char *name)
 {
 	if (!name)
@@ -30,7 +19,7 @@ int	is_name_valid(const char *name)
 	int(i) = 0;
 	while (name[i])
 	{
-		if (!ft_isalnum_name(name[i]))
+		if (!(ft_isalnum(name[i]) || name[i] == '_'))
 			return (0);
 		i++;
 	}

@@ -17,5 +17,6 @@ void	ft_exit(void)
 	ft_printf("exit\n");
 	free_cmd_list();
 	free_env();
+	rl_clear_history();
 	exit(0);
 }
