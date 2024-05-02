@@ -41,7 +41,7 @@ char	*match_env_var(char *name, int len)
 	t_list	*env;
 	int		last_exit;
 
-	if (len == 1 && !ft_strncmp(name, "?", 2))
+	if (len == 1 && !ft_strncmp(name, "?", 1))
 	{
 		last_exit = get_ms()->last_exit;
 		if (last_exit == 0)
