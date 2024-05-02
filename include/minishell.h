@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:36:17 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/30 21:02:53 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/02 10:23:15 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,27 +131,28 @@ void	free_tokens(t_token **tokens);
 void    print_tokens(t_token *tokens);
 
 /* parse tokens */
-bool    parse_tokens(t_token *tokens);
+void    parse_token_into_cmds(t_token *tokens);
 t_list  *gen_cmd_list(t_token *tokens);
 t_list  *parse_cmd(t_token **tokens);
-bool    parse_redir(char *file, t_token **redir_list, t_token **tokens);
-bool    parse_cmd_and_arg(t_list **cmd_arg, t_token **tokens);
-bool    reform_as_cmd_arr(t_list *cmd_arg, t_cmd *cmd);
+void    parse_redir(char *file, t_token **redir_list, t_token **tokens);
+void    parse_cmd_and_arg(t_list **cmd_arg, t_token **tokens);
+void    reform_as_cmd_arr(t_list *cmd_arg, t_cmd *cmd);
 void    free_cmd_arg_list(t_list **cmd_arg);
-void    print_cmd_list(t_list *exec_list);
 void    free_str_arr(char ***p_str_arr);
 void    free_cmd_list(void);
+void	free_tokens(t_token **tokens);
 
 /* pre-expand */
-void    pre_expand(t_list **cmd_arg, t_cmd *cmd);
-void    expand_env_var(t_list **cmd_arg, int head);
+void    pre_expand(t_token *tokens);
+void    expand_env_var(t_token *token, int head);
 char    *match_env_var(char *name, int len);
-void    expand_cmd_path(t_cmd *cmd, char *executable);
-void    remove_quotes(t_list **str_node, char *old_str);
-bool    has_expandable_dollar_str(t_list *arg, int *dollar_pos);
-char    **get_paths_array(void);
+void    remove_quotes(t_token *token, char *old_str);
+bool    has_expandable_dollar_str(t_token *token, int *dollar_pos);
 char    *assemble_new_str(char *old_str, char *value, int head, int end);
 char    *assemble_new_str2(char *old_str, int pair_of_quotes);
+void    expand_fullpath(t_list *cmds);
+char    **get_paths_array(void);
+void    assemble_fullpath(t_cmd *cmd, char *cmd_name, char **paths);
 
 typedef struct s_shell
 {
@@ -170,7 +171,7 @@ int			ft_cd(char **args, t_list *env);
 int			ft_echo(char **args);
 int			print_env(t_list *env);
 int			ft_export(char **args, t_list *env);
-void		ft_exit(void);
+int		ft_exit(char **args);
 int 		ft_unset(char **args, t_list *env);
 
 // Signals

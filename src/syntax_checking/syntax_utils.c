@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 05:53:13 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/29 10:53:06 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/02 10:07:53 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,19 +72,19 @@ char	*trim_line(char *str)
 
 int	has_unclosed_quotes(const char *input)
 {
-	char	open_quote;
+    char	open_quote;
 
-	open_quote = 0;
-	while (*input)
-	{
-		if (ft_strchr("\'\"", *input))
-		{
-			if (open_quote == *input)
-				open_quote = 0;
-			else
-				open_quote = *input;
-		}
-		input++;
-	}
-	return (open_quote != 0);
+    open_quote = 0;
+    while (*input)
+    {
+        if (ft_strchr("\'\"", *input))
+        {
+            if (open_quote == *input)
+                open_quote = 0;
+            else if (open_quote == 0)
+                open_quote = *input;
+        }
+        input++;
+    }
+    return (open_quote != 0);
 }
