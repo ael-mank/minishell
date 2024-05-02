@@ -19,6 +19,8 @@ int	ft_echo(char **args)
 
 	i = 1;
 	n = 0;
+	if (!args[1])
+		return (0);
 	while (ft_strncmp("-n", args[i], 2) == 0)
 	{
 		n = 1;

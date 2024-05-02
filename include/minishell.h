@@ -99,7 +99,7 @@ void	syntax_error_pos(char *pos);
 /* execution */
 void	exec_manager(void);
 void    single_cmd_exec(t_cmd *cmd);
-void    pipex(t_ms *ms, t_list *cmds);
+void    pipex(t_ms *ms, t_list *cmds, int nb_cmds);
 void    fork_children(int nb_cmds, t_pipe pipe_arr[MAX_PIPE], t_list *cmds);
 void	child_first(t_cmd *child, int pipe[2]);
 void	child_middle(t_cmd *child, int pipe1[2], int pipe2[2]);
@@ -111,11 +111,11 @@ int		exec_builtin(t_cmd *child);
 void	child_free_exit(int exit_code);
 
 /* pre-execution */
-void    handle_redirections(t_list *cmds);
-void    handle_redir_in(t_cmd *cmd);
+bool    handle_redirections(t_list *cmds);
+bool    handle_redir_in(t_cmd *cmd);
 int     receive_heredoc(char *delimiter, char *filename);
 char    *gen_unique_filename(unsigned long p);
-void    handle_redir_out(t_cmd *cmd);
+bool    handle_redir_out(t_cmd *cmd);
 
 /* tokenization */
 t_token	*tokenize(char *line);

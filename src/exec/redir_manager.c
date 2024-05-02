@@ -12,27 +12,31 @@
 
 #include "minishell.h"
 
-void	handle_redirections(t_list *cmds)
+bool	handle_redirections(t_list *cmds)
 {
 	t_cmd	*curr_cmd;
+	int		valid_redirs;
 
+	valid_redirs = 1;
 	while (cmds)
 	{
 		curr_cmd = (t_cmd *)cmds->content;
-		handle_redir_in(curr_cmd);
-		handle_redir_out(curr_cmd);
+		if (!handle_redir_in(curr_cmd) || !handle_redir_out(curr_cmd))
+		{
+			get_ms()->last_exit = 1;
+			valid_redirs = 1;
+		}
 		cmds = cmds->next;
 	}
+	return (valid_redirs);
 }
 
-void	handle_redir_in(t_cmd *cmd)
+bool	handle_redir_in(t_cmd *cmd)
 {
 	t_token	*src;
 	char	*filename;
 
 	src = cmd->redir_in;
-	if (!src)
-		return ;
 	while (src)
 	{
 		if (src->type == TOKEN_REDIR_HEREDOC)
@@ -48,9 +52,11 @@ void	handle_redir_in(t_cmd *cmd)
 		{
 			ft_putstr_fd("minishell: ", 2);
 			perror(src->value);
+			return (0);
 		}
 		src = src->next;
 	}
+	return (1);
 }
 
 int	receive_heredoc(char *delimiter, char *filename)
@@ -94,7 +100,7 @@ char	*gen_unique_filename(unsigned long p)
 	return (filename);
 }
 
-void	handle_redir_out(t_cmd *cmd)
+bool	handle_redir_out(t_cmd *cmd)
 {
 	t_token	*dst;
 
@@ -102,7 +108,7 @@ void	handle_redir_out(t_cmd *cmd)
 	if (!dst)
 	{
 		cmd->fd_out = STDOUT_FILENO;
-		return ;
+		return (1);
 	}
 	while (dst)
 	{
@@ -114,7 +120,9 @@ void	handle_redir_out(t_cmd *cmd)
 		{
 			ft_putstr_fd("minishell: ", 2);
 			perror(dst->value);
+			return (0);
 		}
 		dst = dst->next;
 	}
+	return (1);
 }
