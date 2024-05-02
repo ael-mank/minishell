@@ -12,20 +12,22 @@
 
 #include "minishell.h"
 
-void	pipex(t_ms *ms, t_list *cmds)
+void	pipex(t_ms *ms, t_list *cmds, int nb_cmds)
 {
 	int	i;
-	int	nb_cmds;
 	int	status;
 
 	i = -1;
-	nb_cmds = ft_lstsize(cmds);
 	while (++i < nb_cmds - 1)
 	{
 		if (pipe(ms->pipe[i].fd) == -1)
-			exit(EXIT_FAILURE);
+			return ;
 	}
-	handle_redirections(cmds);
+	if (!handle_redirections(cmds))
+	{
+		get_ms()->last_exit = 1;
+		return ;
+	}
 	fork_children(nb_cmds, ms->pipe, cmds);
 	close(ms->pipe[i - 1].fd[0]);
 	close(ms->pipe[i - 1].fd[1]);

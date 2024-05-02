@@ -71,6 +71,8 @@ int	exec_builtin(t_cmd *child)
 	cmd_name = child->cmd_arr[0];
 	ms = get_ms();
 	exit_code = 0;
+	// if (child->fd_out != STDOUT_FILENO)
+	// 	dup2(child->fd_out, STDOUT_FILENO);
 	if (!ft_strncmp(cmd_name, "echo", 5))
 		exit_code = ft_echo(child->cmd_arr);
 	else if (!ft_strncmp(cmd_name, "cd", 3))
@@ -87,17 +89,3 @@ int	exec_builtin(t_cmd *child)
 		exit_code = ft_exit(child->cmd_arr);
 	return (exit_code);
 }
-
-// void	catch_last_status(int *status)
-// {
-// 	if (WIFEXITED(*status))
-// 	{
-// 		get_ms()->last_exit = WEXITSTATUS(*status);
-// 		// printf("Exit status of the child was %d\n", get_ms()->last_exit);
-// 	}
-// 	else if (WIFSIGNALED(*status))
-// 	{
-// 		get_ms()->last_exit = WTERMSIG(*status);
-// 		// printf("Exit status of the child was %d\n", get_ms()->last_exit);
-// 	}
-// }
