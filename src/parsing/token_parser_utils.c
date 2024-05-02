@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 20:23:28 by yrigny            #+#    #+#             */
-/*   Updated: 2024/05/02 10:00:04 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/02 19:57:29 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,12 @@ void	print_cmd_list(t_list *cmd_list)
 	t_token	*infiles;
 	t_token	*outfiles;
 	char	**str_arr;
+	t_ms	*ms;
+	t_list	**cmd_list;
+	t_list	*next_cmd_node;
+	t_ms	*ms;
+	t_list	**cmd_list;
+	t_list	*next_cmd_node;
 
 	while (cmd_list)
 	{
@@ -107,7 +113,6 @@ void	print_cmd_list(t_list *cmd_list)
 		printf("----------------------\n");
 	}
 }*/
-
 void	free_cmd_list(void)
 {
 	t_ms	*ms;
