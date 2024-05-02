@@ -6,13 +6,13 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 07:04:36 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/16 14:21:23 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/30 20:57:15 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	print_env(t_list *env)
+int	print_env(t_list *env)
 {
 	t_list	*tmp;
 
@@ -23,4 +23,5 @@ void	print_env(t_list *env)
 			((t_env *)tmp->content)->value);
 		tmp = tmp->next;
 	}
+	return (0);
 }

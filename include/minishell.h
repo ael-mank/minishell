@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:36:17 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/29 15:23:40 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/30 21:02:53 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,6 @@
 # include <sys/wait.h>
 # include <unistd.h>
 # include <stdbool.h>
-
-# define SUCCESS 1
-# define FAILURE 0
 
 # ifndef MAX_PIPE
 #  define MAX_PIPE 1024
@@ -53,13 +50,12 @@ typedef struct s_token
 
 typedef struct s_cmd
 {
-    char    **cmd_arr; // filled by token parser
-    char    *fullpath; // to do later in pre-execution step
-    t_token *redir_in; // filled by token parser
-    t_token *redir_out; // filled by token parser
-    int     fd_in; // to do in pipe parser
-    int     fd_out; // to do in pipe parser
-    // int  pipe[2];
+    char    **cmd_arr;
+    char    *fullpath;
+    t_token *redir_in;
+    t_token *redir_out;
+    int     fd_in;
+    int     fd_out;
 }   t_cmd;
 
 typedef struct s_env
@@ -76,17 +72,14 @@ typedef struct s_pipe
 
 typedef struct s_ms
 {
-    char    *curr_dir; // why this?
     t_list  *env;
     t_list  *cmds;
     pid_t   pids[1024];
 	t_pipe  pipe[MAX_PIPE];
     int     last_exit;
-    pid_t   last_pipe_pid; // what's this?
 }   t_ms;
 
 /* main process */
-// void	free_env(t_list *env);
 void	shell_routine(void);
 t_ms	*get_ms(void);
 int		empty_line(char *line);
@@ -114,9 +107,9 @@ void	child_middle(t_cmd *child, int pipe1[2], int pipe2[2]);
 void	child_last(t_cmd *child, int pipe[2]);
 bool    cmd_exists(t_cmd *child);
 bool	cmd_is_executable(t_cmd *child);
-void	execute_cmd(t_cmd *child);
-void	exec_builtin(t_cmd *child);
-void	catch_last_status(int *status);
+void	execute_child(t_cmd *child);
+int		exec_builtin(t_cmd *child);
+void	child_free_exit(int exit_code);
 
 /* pre-execution */
 void    handle_redirections(t_list *cmds);
@@ -169,21 +162,16 @@ typedef struct s_shell
 
 // INIT
 bool		init_env(char **env, t_ms *shell);
-void		free_env(t_list *env);
-
-// EXEC
-
-int		check_exec_builtin(t_ms *shell);
-void	exec_cmd(void);
+void	    free_env(void);
 
 // Builtins
 int			ft_pwd(void);
 int			ft_cd(char **args, t_list *env);
 int			ft_echo(char **args);
-void		print_env(t_list *env);
-void		ft_export(char **args, t_list *env);
-void		ft_exit(t_ms *shell);
-void 		ft_unset(char **args, t_list *env);
+int			print_env(t_list *env);
+int			ft_export(char **args, t_list *env);
+void		ft_exit(void);
+int 		ft_unset(char **args, t_list *env);
 
 // Signals
 void		setup_signals(void);

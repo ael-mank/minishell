@@ -6,16 +6,17 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 09:37:20 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/18 15:17:04 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/30 21:02:42 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_exit(t_ms *shell)
+void	ft_exit(void)
 {
 	ft_printf("exit\n");
 	free_cmd_list();
-	free_env(shell->env);
+	free_env();
+	rl_clear_history();
 	exit(0);
 }
