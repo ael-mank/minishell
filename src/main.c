@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:16:09 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/05/02 09:37:59 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/02 09:42:26 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	shell_routine(void)
 		tempPrompt = ft_strjoin(prompt, pwd);
 		free(prompt);
 		free(pwd);
-		finalPrompt = ft_strjoin(tempPrompt, " $ ");
+		finalPrompt = ft_strjoin(tempPrompt, "$ ");
 		free(tempPrompt);
 		line = readline(finalPrompt);
 		free(finalPrompt);
@@ -50,17 +50,16 @@ void	shell_routine(void)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_ms *ms;
+	t_ms	*ms;
 
 	(void)argc;
 	(void)argv;
 	ms = get_ms();
 	// g_signal = 0;
-	if (init_env(envp, ms) == FAILURE)
-		return (FAILURE);
-	// ms->curr_dir = get_curr_dir();
+	if (init_env(envp, ms) == 0)
+		return (EXIT_FAILURE);
 	setup_signals();
 	shell_routine();
-	free_env(ms->env);
-	return (SUCCESS);
+	free_env();
+	return (EXIT_SUCCESS);
 }

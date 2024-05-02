@@ -6,22 +6,11 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:22:08 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/29 10:46:50 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/04/30 20:55:29 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	ft_isalnum_name(int c)
-{
-	if (c == '_')
-		return (1);
-	if (((c >= 48) && (c <= 57)) || ((c >= 65) && (c <= 90)) || ((c >= 97)
-			&& (c <= 122)))
-		return (1);
-	else
-		return (0);
-}
 
 int	is_name_valid(const char *name)
 {
@@ -30,14 +19,14 @@ int	is_name_valid(const char *name)
 	int(i) = 0;
 	while (name[i])
 	{
-		if (!ft_isalnum_name(name[i]))
+		if (!(ft_isalnum(name[i]) || name[i] == '_'))
 			return (0);
 		i++;
 	}
 	return (1);
 }
 
-void	ft_export(char **args, t_list *env)
+int	ft_export(char **args, t_list *env)
 {
 	t_env	*env_var;
 	t_list	*env_var_node;
@@ -47,20 +36,21 @@ void	ft_export(char **args, t_list *env)
 	if (!is_name_valid(name_value[0]))
 	{
 		ft_free_args(name_value);
-		return ;
+		return (1);
 	}
 	env_var = malloc(sizeof(t_env));
 	if (!env_var)
-		return ;
+		return (1);
 	env_var->name = ft_strdup(name_value[0]);
 	if (!env_var->name)
-		return ;
+		return (1);
 	env_var->value = ft_strdup(name_value[1]);
 	if (!env_var->value)
-		return ;
+		return (1);
 	ft_free_args(name_value);
 	env_var_node = ft_lstnew(env_var);
 	if (!env_var_node)
-		return ;
+		return (1);
 	ft_lstadd_back(&env, env_var_node);
+	return (0);
 }

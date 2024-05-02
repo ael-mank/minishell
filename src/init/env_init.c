@@ -53,10 +53,12 @@ bool	init_env(char **envp, t_ms *shell)
 	return (1);
 }
 
-void	free_env(t_list *env)
+void	free_env(void)
 {
+	t_list	*env;
 	t_list	*tmp;
 
+	env = get_ms()->env;
 	while (env)
 	{
 		tmp = env;
