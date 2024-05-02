@@ -62,7 +62,7 @@ void	free_cmd_arg_list(t_list **cmd_arg)
 		*cmd_arg = next;
 	}
 }
-
+/*
 void	print_cmd_list(t_list *cmd_list)
 {
 	t_cmd	*cmd_node;
@@ -106,7 +106,7 @@ void	print_cmd_list(t_list *cmd_list)
 		cmd_list = cmd_list->next;
 		printf("----------------------\n");
 	}
-}
+}*/
 
 void	free_cmd_list(void)
 {

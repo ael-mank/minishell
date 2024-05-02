@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_parser.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yrigny <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/02 16:31:09 by yrigny            #+#    #+#             */
+/*   Updated: 2024/05/02 16:31:11 by yrigny           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	parse_token_into_cmds(t_token *tokens)
@@ -8,7 +20,6 @@ void	parse_token_into_cmds(t_token *tokens)
 		return ;
 	ms = get_ms();
 	pre_expand(tokens);
-	// print_tokens(tokens);
 	ms->cmds = gen_cmd_list(tokens);
 	if (!ms->cmds)
 	{
@@ -17,7 +28,6 @@ void	parse_token_into_cmds(t_token *tokens)
 	}
 	free_tokens(&tokens);
 	expand_fullpath(ms->cmds);
-	// print_cmd_list(ms->cmds);
 }
 
 t_list	*gen_cmd_list(t_token *tokens)
@@ -61,7 +71,7 @@ t_list	*parse_cmd(t_token **tokens)
 			parse_cmd_and_arg(&cmd_arg, tokens);
 	}
 	reform_as_cmd_arr(cmd_arg, new_cmd);
-	free_cmd_arg_list(&cmd_arg); // never skip this
+	free_cmd_arg_list(&cmd_arg);
 	return (ft_lstnew(new_cmd));
 }
 
@@ -92,8 +102,8 @@ void	parse_redir(char *file, t_token **redir_list, t_token **tokens)
 
 void	parse_cmd_and_arg(t_list **cmd_arg, t_token **tokens)
 {
-	char *new_word;
-	t_list *new_node;
+	char	*new_word;
+	t_list	*new_node;
 
 	new_word = ft_strdup((*tokens)->value);
 	if (!new_word)

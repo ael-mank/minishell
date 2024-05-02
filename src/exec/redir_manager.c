@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redir_manager.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yrigny <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/02 16:24:00 by yrigny            #+#    #+#             */
+/*   Updated: 2024/05/02 16:24:01 by yrigny           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	handle_redirections(t_list *cmds)
@@ -84,7 +96,7 @@ char	*gen_unique_filename(unsigned long p)
 
 void	handle_redir_out(t_cmd *cmd)
 {
-	t_token *dst;
+	t_token	*dst;
 
 	dst = cmd->redir_out;
 	if (!dst)

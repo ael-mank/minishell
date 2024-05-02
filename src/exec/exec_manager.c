@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_manager.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yrigny <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/02 16:23:50 by yrigny            #+#    #+#             */
+/*   Updated: 2024/05/02 16:23:51 by yrigny           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	exec_manager(void)
@@ -35,7 +47,6 @@ void	single_cmd_exec(t_cmd *cmd)
 		execute_child(cmd);
 	}
 	waitpid(pid, &status, 0);
-	// catch_last_status(&status);
 	if (WIFEXITED(status))
 		get_ms()->last_exit = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
