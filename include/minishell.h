@@ -38,7 +38,6 @@ typedef enum e_token_type
     TOKEN_REDIR_HEREDOC,// '<<'
     TOKEN_REDIR_OUT,    // '>'
     TOKEN_REDIR_APPEND, // '>>'
-    TOKEN_ENV_VAR,      // '$'
 }   t_token_type;
 
 typedef struct s_token
@@ -154,13 +153,6 @@ void    expand_fullpath(t_list *cmds);
 char    **get_paths_array(void);
 void    assemble_fullpath(t_cmd *cmd, char *cmd_name, char **paths);
 
-typedef struct s_shell
-{
-	char	*line;
-	t_list	*env;
-
-}			t_shell;
-
 // INIT
 bool		init_env(char **env, t_ms *shell);
 void	    free_env(void);
@@ -176,6 +168,7 @@ int 		ft_unset(char **args, t_list *env);
 
 // Signals
 void		setup_signals(void);
+void	sigint_handler(int sig);
 
 // Syntax
 int			check_syntax_errors(const char *input);

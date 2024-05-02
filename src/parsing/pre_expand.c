@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pre_expand.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yrigny <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/02 16:28:46 by yrigny            #+#    #+#             */
+/*   Updated: 2024/05/02 16:28:47 by yrigny           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	pre_expand(t_token *tokens)
@@ -29,10 +41,8 @@ void	expand_env_var(t_token *token, int head)
 			end++;
 	}
 	env_var_value = match_env_var(&old_str[head + 1], end - head);
-	// printf("env_var_value: [%s]\n", env_var_value);
 	new_str = assemble_new_str(old_str, env_var_value, head, end);
 	free(old_str);
-	// printf("new str: %s\n", new_str);
 	token->value = new_str;
 }
 
@@ -44,16 +54,17 @@ char	*match_env_var(char *name, int len)
 	if (len == 1 && !ft_strncmp(name, "?", 1))
 	{
 		last_exit = get_ms()->last_exit;
-		if (last_exit == 0)
-			return ("0");
 		if (last_exit == 1)
 			return ("1");
+		if (last_exit == 2)
+			return ("2");
 		if (last_exit == 126)
 			return ("126");
 		if (last_exit == 127)
 			return ("127");
 		if (last_exit == 130)
 			return ("130");
+		return ("0");
 	}
 	env = get_ms()->env;
 	while (env && ft_strncmp(((t_env *)env->content)->name, name, len))
@@ -91,8 +102,8 @@ void	remove_quotes(t_token *token, char *old_str)
 
 void	expand_fullpath(t_list *cmds)
 {
-	char **paths;
-	t_cmd *cmd;
+	char	**paths;
+	t_cmd	*cmd;
 
 	paths = get_paths_array();
 	if (!paths)

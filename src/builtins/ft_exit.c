@@ -12,9 +12,9 @@
 
 #include "minishell.h"
 
-int is_number(char *str)
+int	is_number(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (str[i] == '+' || str[i] == '-')
@@ -28,11 +28,12 @@ int is_number(char *str)
 	return (1);
 }
 
-int is_input_valid(char **args)
+int	is_input_valid(char **args)
 {
-	int i;
+	int	i;
+
 	i = 0;
-	while(args[i])
+	while (args[i])
 		i++;
 	if (i == 2 && !is_number(args[1]))
 	{
@@ -46,24 +47,24 @@ int is_input_valid(char **args)
 
 int	ft_exit(char **args)
 {
-    int status;
-    int i;
+	int	status;
+	int	i;
 
-    i = 0;
-    while(args[i])
-        i++;
-    if (i > 2)
-    {
-        ft_putstr_fd("exit: too many arguments\n", 2);
-        return (1);
-    }
-    ft_printf("exit\n");
-    if (i == 2 && is_input_valid(args))
-        status = ft_atoi(args[1]);
-    else
-        status = 2;
-    free_cmd_list();
-    free_env();
-    rl_clear_history();
-    exit(status);
+	i = 0;
+	while (args[i])
+		i++;
+	if (i > 2)
+	{
+		ft_putstr_fd("exit: too many arguments\n", 2);
+		return (1);
+	}
+	ft_printf("exit\n");
+	if (i == 2 && is_input_valid(args))
+		status = ft_atoi(args[1]);
+	else
+		status = 2;
+	free_cmd_list();
+	free_env();
+	rl_clear_history();
+	exit(status);
 }
