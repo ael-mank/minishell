@@ -6,23 +6,23 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 20:23:28 by yrigny            #+#    #+#             */
-/*   Updated: 2024/04/29 10:44:16 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/02 10:00:04 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	reform_as_cmd_arr(t_list *cmd_arg, t_cmd *cmd)
+void	reform_as_cmd_arr(t_list *cmd_arg, t_cmd *cmd)
 {
 	char	**ptr;
 	int		wordcount;
 
 	wordcount = ft_lstsize(cmd_arg);
 	if (!wordcount)
-		return (0);
+		return ;
 	cmd->cmd_arr = malloc(sizeof(char *) * (wordcount + 1));
 	if (!(cmd->cmd_arr))
-		return (0);
+		return ;
 	ptr = cmd->cmd_arr;
 	while (cmd_arg)
 	{
@@ -33,7 +33,6 @@ bool	reform_as_cmd_arr(t_list *cmd_arg, t_cmd *cmd)
 		ptr++;
 	}
 	*ptr = NULL;
-	return (1);
 }
 
 void	free_str_arr(char ***p_str_arr)

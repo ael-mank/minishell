@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-bool    cmd_exists(t_cmd *child)
+bool	cmd_exists(t_cmd *child)
 {
 	if (!child->fullpath)
 	{
@@ -8,14 +8,14 @@ bool    cmd_exists(t_cmd *child)
 		ft_putstr_fd(": command not found\n", 2);
 		return (0);
 	}
-    return (1);
+	return (1);
 }
 
 bool	cmd_is_executable(t_cmd *child)
 {
 	if (access(child->fullpath, X_OK) != 0)
 	{
-        ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd("minishell: ", 2);
 		perror(child->cmd_arr[0]);
 		return (0);
 	}
@@ -29,7 +29,7 @@ void	execute_child(t_cmd *child)
 	if (is_builtin(child->cmd_arr[0]))
 	{
 		builtin_exit_code = exec_builtin(child);
-		child_free_exit(builtin_exit_code); // 0: OK, 1: general error, 2: invalid option
+		child_free_exit(builtin_exit_code);
 	}
 	if (!cmd_exists(child))
 		child_free_exit(127);
@@ -48,7 +48,7 @@ void	child_free_exit(int exit_code)
 	exit(exit_code);
 }
 
-int		exec_builtin(t_cmd *child)
+int	exec_builtin(t_cmd *child)
 {
 	char	*cmd_name;
 	t_ms	*ms;
@@ -70,6 +70,20 @@ int		exec_builtin(t_cmd *child)
 	else if (!ft_strncmp(cmd_name, "env", 4))
 		exit_code = print_env(ms->env);
 	else if (!ft_strncmp(cmd_name, "exit", 5))
-        	ft_exit();
+		exit_code = ft_exit(child->cmd_arr);
 	return (exit_code);
 }
+
+// void	catch_last_status(int *status)
+// {
+// 	if (WIFEXITED(*status))
+// 	{
+// 		get_ms()->last_exit = WEXITSTATUS(*status);
+// 		// printf("Exit status of the child was %d\n", get_ms()->last_exit);
+// 	}
+// 	else if (WIFSIGNALED(*status))
+// 	{
+// 		get_ms()->last_exit = WTERMSIG(*status);
+// 		// printf("Exit status of the child was %d\n", get_ms()->last_exit);
+// 	}
+// }

@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 06:53:58 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/30 21:02:29 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/02 10:04:49 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	cd_command(t_list *env, char *path)
 {
 	char	*old_pwd;
 	char	*pwd;
-	
+
 	old_pwd = getcwd(NULL, 0);
 	edit_env_value(env, "OLDPWD", old_pwd);
 	free(old_pwd);
@@ -33,9 +33,22 @@ int	cd_command(t_list *env, char *path)
 
 int	ft_cd(char **args, t_list *env)
 {
-	if (args[1] == NULL)
-		return(cd_command(env, "/home"));
+	int	args_count;
+
+	args_count = 0;
+	while (args[args_count])
+		args_count++;
+	if (args_count > 2)
+	{
+		ft_putstr_fd("cd: too many arguments\n", 2);
+		return (1);
+	}
 	else
-		return(cd_command(env, args[1]));
+	{
+		if (args[1] == NULL)
+			return (cd_command(env, "/home"));
+		else
+			return (cd_command(env, args[1]));
+	}
 	return (1);
 }

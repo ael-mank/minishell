@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:16:09 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/05/02 09:42:26 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/02 10:00:56 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ void	shell_routine(void)
 		tokens = check_syntax_and_tokenize(line);
 		if (!tokens)
 			continue ;
-		parse_tokens(tokens);
+		parse_token_into_cmds(tokens);
+		exec_manager();
 		free_cmd_list();
 	}
 	rl_clear_history();
@@ -50,7 +51,7 @@ void	shell_routine(void)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_ms	*ms;
+	t_ms *ms;
 
 	(void)argc;
 	(void)argv;
