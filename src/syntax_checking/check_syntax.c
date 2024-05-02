@@ -101,8 +101,8 @@ int	check_syntax_errors(const char *input)
 	if (has_logical_operators(input))
 	{
 		ft_putstr_fd("Error: Logical operators"
-			" '&&' and '||' are not supported.\n",
-			STDERR_FILENO);
+						" '&&' and '||' are not supported.\n",
+						STDERR_FILENO);
 		return (1);
 	}
 	return (0);

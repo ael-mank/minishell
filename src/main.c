@@ -6,34 +6,52 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:16:09 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/05/02 10:00:56 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/02 21:21:30 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+char	*create_prompt(void)
+{
+	char	*pwd;
+	char	*finalprompt;
+
+	char **(go_back) = malloc(sizeof(char *) * 3);
+	char *(user) = match_env_var("USER", 4);
+	if (!go_back)
+		return (NULL);
+	go_back[0] = "cd";
+	go_back[1] = ".";
+	go_back[2] = NULL;
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
+	{
+		chdir("..");
+		ft_cd(go_back, get_ms()->env);
+		pwd = getcwd(NULL, 0);
+	}
+	char *(prompt) = ft_strjoin(user, "@");
+	char *(tempprompt) = ft_strjoin(prompt, pwd);
+	free(prompt);
+	free(pwd);
+	finalprompt = ft_strjoin(tempprompt, "$ ");
+	free(tempprompt);
+	free(go_back);
+	return (finalprompt);
+}
+
 void	shell_routine(void)
 {
 	char	*line;
 	t_token	*tokens;
-	char	*user;
-	char	*pwd;
-	char	*prompt;
-	char	*tempPrompt;
-	char	*finalPrompt;
+	char	*finalprompt;
 
 	while (1)
 	{
-		user = match_env_var("USER", 4);
-		pwd = getcwd(NULL, 0);
-		prompt = ft_strjoin(user, "@");
-		tempPrompt = ft_strjoin(prompt, pwd);
-		free(prompt);
-		free(pwd);
-		finalPrompt = ft_strjoin(tempPrompt, "$ ");
-		free(tempPrompt);
-		line = readline(finalPrompt);
-		free(finalPrompt);
+		finalprompt = create_prompt();
+		line = readline(finalprompt);
+		free(finalprompt);
 		if (!line)
 			break ;
 		if (empty_line(line))
@@ -51,12 +69,11 @@ void	shell_routine(void)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_ms *ms;
+	t_ms	*ms;
 
 	(void)argc;
 	(void)argv;
 	ms = get_ms();
-	// g_signal = 0;
 	if (init_env(envp, ms) == 0)
 		return (EXIT_FAILURE);
 	setup_signals();
