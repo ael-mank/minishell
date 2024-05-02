@@ -26,6 +26,8 @@ void	execute_child(t_cmd *child)
 {
 	int	builtin_exit_code;
 
+	if (child->fd_in == -1 || child->fd_out == -1)
+		child_free_exit(1);
 	if (is_builtin(child->cmd_arr[0]))
 	{
 		builtin_exit_code = exec_builtin(child);
