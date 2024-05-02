@@ -120,6 +120,7 @@ t_token	*check_syntax_and_tokenize(char *line)
 		return (NULL);
 	if (check_syntax_errors(trimmed_line))
 	{
+		get_ms()->last_exit = 2;
 		free(trimmed_line);
 		return (NULL);
 	}
