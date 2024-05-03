@@ -23,11 +23,6 @@ void	pipex(t_ms *ms, t_list *cmds, int nb_cmds)
 		if (pipe(ms->pipe[i].fd) == -1)
 			return ;
 	}
-	if (!handle_redirections(cmds))
-	{
-		get_ms()->last_exit = 1;
-		return ;
-	}
 	fork_children(nb_cmds, ms->pipe, cmds);
 	close(ms->pipe[i - 1].fd[0]);
 	close(ms->pipe[i - 1].fd[1]);

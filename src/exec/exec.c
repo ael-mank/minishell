@@ -67,6 +67,7 @@ int	exec_builtin(t_cmd *child)
 	int	exit_code;
 	int	original;
 
+	exit_code = 0;
 	original = 0;
 	if (child->fd_out != STDOUT_FILENO)
 	{

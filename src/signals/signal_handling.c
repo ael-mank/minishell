@@ -23,6 +23,19 @@ void	sigint_handler(int sig)
 	rl_replace_line("", 0);
 	rl_redisplay();
 }
+/*
+void	sigquit_handler(int sig)
+{
+	int	status;
+
+	(void)sig;
+	status = get_ms()->last_exit;
+	write(1, "exit\n", 5);
+	free_cmd_list();
+	free_env();
+	rl_clear_history();
+	exit(status);
+}*/
 
 void	child_sigint_handler(int sig)
 {
@@ -41,3 +54,8 @@ void	setup_signals(void)
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
 }
+
+/* TODO : exit by pressing Ctrl D should
+	1. print "exit\n" 
+	2. keep the last exit status in $?
+*/

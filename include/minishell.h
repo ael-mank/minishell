@@ -51,8 +51,7 @@ typedef struct s_cmd
 {
     char    **cmd_arr;
     char    *fullpath;
-    t_token *redir_in;
-    t_token *redir_out;
+    t_token *redir;
     int     fd_in;
     int     fd_out;
 }   t_cmd;
@@ -112,11 +111,11 @@ int	    exec_single_builtin(t_cmd *cmd);
 void	child_free_exit(int exit_code);
 
 /* pre-execution */
-bool    handle_redirections(t_list *cmds);
-bool    handle_redir_in(t_cmd *cmd);
+void    handle_redirections(t_list *cmds);
+bool	handle_redir_in(t_cmd *cmd, t_token *src);
 int     receive_heredoc(char *delimiter, char *filename);
 char    *gen_unique_filename(unsigned long p);
-bool    handle_redir_out(t_cmd *cmd);
+bool	handle_redir_out(t_cmd *cmd, t_token *dst);
 
 /* tokenization */
 t_token	*tokenize(char *line);
@@ -170,6 +169,7 @@ int 		ft_unset(char **args, t_list *env);
 // Signals
 void		setup_signals(void);
 void	sigint_handler(int sig);
+void	sigquit_handler(int sig);
 void	child_sigint_handler(int sig);
 
 // Syntax

@@ -21,6 +21,7 @@ void	exec_manager(void)
 	ms = get_ms();
 	cmds = ms->cmds;
 	nb_cmds = ft_lstsize(cmds);
+	handle_redirections(cmds);
 	if (nb_cmds == 1)
 		single_cmd_exec(cmds->content);
 	else
@@ -40,7 +41,7 @@ void	single_cmd_exec(t_cmd *cmd)
 	pid_t	pid;
 	int		status;
 
-	if (!(handle_redir_in(cmd) && handle_redir_out(cmd)))
+	if (cmd->fd_in == -1 || cmd->fd_out == -1)
 	{
 		get_ms()->last_exit = 1;
 		return ;
