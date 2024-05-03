@@ -21,7 +21,7 @@ bool	handle_redirections(t_list *cmds)
 	while (cmds)
 	{
 		curr_cmd = (t_cmd *)cmds->content;
-		if (!handle_redir_in(curr_cmd) || !handle_redir_out(curr_cmd))
+		if (!(handle_redir_in(curr_cmd) && handle_redir_out(curr_cmd)))
 		{
 			get_ms()->last_exit = 1;
 			valid_redirs = 1;

@@ -108,6 +108,7 @@ bool    cmd_exists(t_cmd *child);
 bool	cmd_is_executable(t_cmd *child);
 void	execute_child(t_cmd *child);
 int		exec_builtin(t_cmd *child);
+int	    exec_single_builtin(t_cmd *cmd);
 void	child_free_exit(int exit_code);
 
 /* pre-execution */
