@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 06:49:21 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/30 20:54:48 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/03 11:05:12 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,15 @@
 int	ft_echo(char **args)
 {
 	int	i;
-	int	n;
+	int	n_flag;
 
 	i = 1;
-	n = 0;
+	n_flag = 0;
 	if (!args[1])
 		return (0);
-	while (ft_strncmp("-n", args[i], 2) == 0)
+	if (args[i] && strcmp("-n", args[i]) == 0)
 	{
-		n = 1;
+		n_flag = 1;
 		i++;
 	}
 	while (args[i])
@@ -33,7 +33,7 @@ int	ft_echo(char **args)
 			printf(" ");
 		i++;
 	}
-	if (!n)
+	if (!n_flag)
 		printf("\n");
 	return (0);
 }

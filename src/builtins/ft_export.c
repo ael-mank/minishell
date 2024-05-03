@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:22:08 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/05/02 11:27:40 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/03 11:20:23 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ bool	has_valid_name(const char *str)
 {
 	int	i;
 
-	if (!str || !(*str) || *str == '=')
+	if (!str || !(*str) || *str == '=' || ft_isdigit(*str))
 		return (0);
 	i = 0;
 	while (str[i] && str[i] != '=')
