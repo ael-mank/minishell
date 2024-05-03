@@ -61,12 +61,9 @@ t_list	*parse_cmd(t_token **tokens)
 		return (NULL);
 	while (*tokens && (*tokens)->type != TOKEN_PIPE)
 	{
-		if ((*tokens)->type == TOKEN_REDIR_IN
-			|| (*tokens)->type == TOKEN_REDIR_HEREDOC)
-			parse_redir((*tokens)->next->value, &new_cmd->redir_in, tokens);
-		else if ((*tokens)->type == TOKEN_REDIR_OUT
-			|| (*tokens)->type == TOKEN_REDIR_APPEND)
-			parse_redir((*tokens)->next->value, &new_cmd->redir_out, tokens);
+		if ((*tokens)->type >= TOKEN_REDIR_IN
+			&& (*tokens)->type <= TOKEN_REDIR_APPEND)
+			parse_redir((*tokens)->next->value, &new_cmd->redir, tokens);
 		else if ((*tokens)->type == TOKEN_WORD)
 			parse_cmd_and_arg(&cmd_arg, tokens);
 	}

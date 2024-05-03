@@ -12,49 +12,49 @@
 
 #include "minishell.h"
 
-bool	handle_redirections(t_list *cmds)
+void	handle_redirections(t_list *cmds)
 {
 	t_cmd	*curr_cmd;
-	int		valid_redirs;
+	t_token	*token;
+	int		valid_redir;
 
-	valid_redirs = 1;
 	while (cmds)
 	{
 		curr_cmd = (t_cmd *)cmds->content;
-		if (!(handle_redir_in(curr_cmd) && handle_redir_out(curr_cmd)))
+		token = curr_cmd->redir;
+		valid_redir = 1;
+		while (token && valid_redir)
 		{
-			get_ms()->last_exit = 1;
-			valid_redirs = 1;
+			if (token->type == TOKEN_REDIR_HEREDOC || token->type == TOKEN_REDIR_IN)
+				valid_redir = handle_redir_in(curr_cmd, token);
+			else
+				valid_redir = handle_redir_out(curr_cmd, token);
+			token = token->next;
 		}
+		if (curr_cmd->fd_out == 0)
+			curr_cmd->fd_out = STDOUT_FILENO;
 		cmds = cmds->next;
 	}
-	return (valid_redirs);
 }
 
-bool	handle_redir_in(t_cmd *cmd)
+bool	handle_redir_in(t_cmd *cmd, t_token *src)
 {
-	t_token	*src;
 	char	*filename;
 
-	src = cmd->redir_in;
-	while (src)
+	if (src->type == TOKEN_REDIR_HEREDOC)
 	{
-		if (src->type == TOKEN_REDIR_HEREDOC)
-		{
-			filename = gen_unique_filename((unsigned long)cmd);
-			cmd->fd_in = receive_heredoc(src->value, filename);
-			unlink(filename);
-			free(filename);
-		}
-		else if (src->type == TOKEN_REDIR_IN)
-			cmd->fd_in = open(src->value, O_RDONLY, 0644);
-		if (cmd->fd_in == -1)
-		{
-			ft_putstr_fd("minishell: ", 2);
-			perror(src->value);
-			return (0);
-		}
-		src = src->next;
+		filename = gen_unique_filename((unsigned long)cmd);
+		cmd->fd_in = receive_heredoc(src->value, filename);
+		unlink(filename);
+		free(filename);
+	}
+	else if (src->type == TOKEN_REDIR_IN)
+		cmd->fd_in = open(src->value, O_RDONLY, 0644);
+	if (cmd->fd_in == -1)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		perror(src->value);
+		return (0);
 	}
 	return (1);
 }
@@ -100,29 +100,17 @@ char	*gen_unique_filename(unsigned long p)
 	return (filename);
 }
 
-bool	handle_redir_out(t_cmd *cmd)
+bool	handle_redir_out(t_cmd *cmd, t_token *dst)
 {
-	t_token	*dst;
-
-	dst = cmd->redir_out;
-	if (!dst)
+	if (dst->type == TOKEN_REDIR_APPEND)
+		cmd->fd_out = open(dst->value, O_CREAT | O_WRONLY | O_APPEND, 0644);
+	else if (dst->type == TOKEN_REDIR_OUT)
+		cmd->fd_out = open(dst->value, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if (cmd->fd_out == -1)
 	{
-		cmd->fd_out = STDOUT_FILENO;
-		return (1);
-	}
-	while (dst)
-	{
-		if (dst->type == TOKEN_REDIR_APPEND)
-			cmd->fd_out = open(dst->value, O_CREAT | O_WRONLY | O_APPEND, 0644);
-		else if (dst->type == TOKEN_REDIR_OUT)
-			cmd->fd_out = open(dst->value, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-		if (cmd->fd_out == -1)
-		{
-			ft_putstr_fd("minishell: ", 2);
-			perror(dst->value);
-			return (0);
-		}
-		dst = dst->next;
+		ft_putstr_fd("minishell: ", 2);
+		perror(dst->value);
+		return (0);
 	}
 	return (1);
 }
