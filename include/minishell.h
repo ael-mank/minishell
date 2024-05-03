@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:36:17 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/05/02 10:23:15 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/03 12:06:38 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,7 @@ int 		ft_unset(char **args, t_list *env);
 // Signals
 void		setup_signals(void);
 void	sigint_handler(int sig);
+void	child_sigint_handler(int sig);
 
 // Syntax
 int			check_syntax_errors(const char *input);
