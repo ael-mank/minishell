@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrigny <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:23:39 by yrigny            #+#    #+#             */
-/*   Updated: 2024/05/02 16:23:41 by yrigny           ###   ########.fr       */
+/*   Updated: 2024/05/03 11:34:16 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,6 @@ int	exec_builtin(t_cmd *child)
 	cmd_name = child->cmd_arr[0];
 	ms = get_ms();
 	exit_code = 0;
-	// if (child->fd_out != STDOUT_FILENO)
-	// 	dup2(child->fd_out, STDOUT_FILENO);
 	if (!ft_strncmp(cmd_name, "echo", 5))
 		exit_code = ft_echo(child->cmd_arr);
 	else if (!ft_strncmp(cmd_name, "cd", 3))

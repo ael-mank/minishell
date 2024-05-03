@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 05:52:01 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/29 10:53:27 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/03 11:33:55 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,8 @@ int	check_syntax_errors(const char *input)
 	if (has_logical_operators(input))
 	{
 		ft_putstr_fd("Error: Logical operators"
-						" '&&' and '||' are not supported.\n",
-						STDERR_FILENO);
+			" '&&' and '||' are not supported.\n",
+			STDERR_FILENO);
 		return (1);
 	}
 	return (0);
