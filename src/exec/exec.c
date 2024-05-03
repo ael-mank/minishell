@@ -42,7 +42,7 @@ void	execute_child(t_cmd *child)
 		child_free_exit(1);
 	if (is_builtin(child->cmd_arr[0]))
 	{
-		builtin_exit_code = exec_builtin(child);
+		builtin_exit_code = exec_single_builtin(child);
 		child_free_exit(builtin_exit_code);
 	}
 	if (!cmd_exists(child))
@@ -64,26 +64,42 @@ void	child_free_exit(int exit_code)
 
 int	exec_builtin(t_cmd *child)
 {
+	int	exit_code;
+	int	original;
+
+	original = 0;
+	if (child->fd_out != STDOUT_FILENO)
+	{
+		original = dup(STDOUT_FILENO);
+		dup2(child->fd_out, STDOUT_FILENO);
+	}
+	exit_code = exec_single_builtin(child);
+	if (child->fd_out != STDOUT_FILENO)
+		dup2(original, STDOUT_FILENO);
+	return (0 || exit_code);
+}
+
+int	exec_single_builtin(t_cmd *cmd)
+{
 	char	*cmd_name;
 	t_ms	*ms;
 	int		exit_code;
 
-	cmd_name = child->cmd_arr[0];
+	cmd_name = cmd->cmd_arr[0];
 	ms = get_ms();
-	exit_code = 0;
 	if (!ft_strncmp(cmd_name, "echo", 5))
-		exit_code = ft_echo(child->cmd_arr);
+		exit_code = ft_echo(cmd->cmd_arr);
 	else if (!ft_strncmp(cmd_name, "cd", 3))
-		exit_code = ft_cd(child->cmd_arr, ms->env);
+		exit_code = ft_cd(cmd->cmd_arr, ms->env);
 	else if (!ft_strncmp(cmd_name, "pwd", 4))
 		exit_code = ft_pwd();
 	else if (!ft_strncmp(cmd_name, "export", 7))
-		exit_code = ft_export(child->cmd_arr, ms->env);
+		exit_code = ft_export(cmd->cmd_arr, ms->env);
 	else if (!ft_strncmp(cmd_name, "unset", 6))
-		exit_code = ft_unset(child->cmd_arr, ms->env);
+		exit_code = ft_unset(cmd->cmd_arr, ms->env);
 	else if (!ft_strncmp(cmd_name, "env", 4))
 		exit_code = print_env(ms->env);
 	else if (!ft_strncmp(cmd_name, "exit", 5))
-		exit_code = ft_exit(child->cmd_arr);
+		exit_code = ft_exit(cmd->cmd_arr);
 	return (exit_code);
 }
