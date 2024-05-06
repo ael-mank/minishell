@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:16:09 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/05/06 10:52:40 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/06 12:10:39 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ int	main(int argc, char **argv, char **envp)
 		return (EXIT_FAILURE);
 	setup_signals();
 	shell_routine();
+	if (isatty(STDIN_FILENO))
+		write(2, "exit\n", 6);
 	free_env();
 	return (EXIT_SUCCESS);
 }
