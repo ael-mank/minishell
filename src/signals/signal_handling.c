@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 12:14:29 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/05/03 13:33:12 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/06 09:58:59 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	sigint_handler(int sig)
 	rl_replace_line("", 0);
 	rl_redisplay();
 }
+
 /*
 void	sigquit_handler(int sig)
 {
@@ -56,6 +57,6 @@ void	setup_signals(void)
 }
 
 /* TODO : exit by pressing Ctrl D should
-	1. print "exit\n" 
+	1. print "exit\n"
 	2. keep the last exit status in $?
 */

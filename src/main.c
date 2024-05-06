@@ -6,38 +6,52 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:16:09 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/05/02 21:21:30 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/06 09:55:37 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*create_prompt(void)
+char	*get_pwd(void)
 {
 	char	*pwd;
-	char	*finalprompt;
 
-	char **(go_back) = malloc(sizeof(char *) * 3);
-	char *(user) = match_env_var("USER", 4);
-	if (!go_back)
-		return (NULL);
-	go_back[0] = "cd";
-	go_back[1] = ".";
-	go_back[2] = NULL;
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 	{
-		chdir("..");
-		ft_cd(go_back, get_ms()->env);
-		pwd = getcwd(NULL, 0);
+		while (!pwd)
+		{
+			chdir("..");
+			pwd = getcwd(NULL, 0);
+		}
 	}
-	char *(prompt) = ft_strjoin(user, "@");
-	char *(tempprompt) = ft_strjoin(prompt, pwd);
+	return (pwd);
+}
+
+char	*create_prompt(char *user, char *pwd)
+{
+	char	*prompt;
+	char	*tempprompt;
+	char	*finalprompt;
+
+	prompt = ft_strjoin(user, "@");
+	tempprompt = ft_strjoin(prompt, pwd);
 	free(prompt);
 	free(pwd);
 	finalprompt = ft_strjoin(tempprompt, "$ ");
 	free(tempprompt);
-	free(go_back);
+	return (finalprompt);
+}
+
+char	*get_prompt(void)
+{
+	char	*pwd;
+	char	*user;
+	char	*finalprompt;
+
+	user = match_env_var("USER", 4);
+	pwd = get_pwd();
+	finalprompt = create_prompt(user, pwd);
 	return (finalprompt);
 }
 
@@ -49,7 +63,7 @@ void	shell_routine(void)
 
 	while (1)
 	{
-		finalprompt = create_prompt();
+		finalprompt = get_prompt();
 		line = readline(finalprompt);
 		free(finalprompt);
 		if (!line)

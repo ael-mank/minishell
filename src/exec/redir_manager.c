@@ -25,7 +25,8 @@ void	handle_redirections(t_list *cmds)
 		valid_redir = 1;
 		while (token && valid_redir)
 		{
-			if (token->type == TOKEN_REDIR_HEREDOC || token->type == TOKEN_REDIR_IN)
+			if (token->type == TOKEN_REDIR_HEREDOC
+				|| token->type == TOKEN_REDIR_IN)
 				valid_redir = handle_redir_in(curr_cmd, token);
 			else
 				valid_redir = handle_redir_out(curr_cmd, token);
