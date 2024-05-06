@@ -8,8 +8,8 @@
 // 7. (OK) error msg: command not found (manual), permission denied (perror), no such file or dir (perror)
 // 8. (OK) create independent heredoc for each cmd
 // 9. set exit status 2 (misused builtin), 128 (invalid argument to exit), and 128+n (fatal error signal)
-// 10. add signals handler
-// 11. debug builtins (export segfult when no argument)
+// 10. (OK) add signals handler
+// 11. (OK) debug builtins (export segfult when no argument)
 // 12. (OK) clean tmp heredoc files after each line executed
 // 13. (OK) replace current prompt with customized prompt ("user:cwd$ ")
 // 14. (OK) fix bug with str replacement of "$?"
