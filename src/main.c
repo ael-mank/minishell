@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:16:09 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/05/06 10:18:35 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/06 10:52:40 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	ms = get_ms();
+	if(!envp)
+		return (EXIT_FAILURE);
 	if (init_env(envp, ms) == 0)
 		return (EXIT_FAILURE);
 	setup_signals();
