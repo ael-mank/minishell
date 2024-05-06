@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:28:46 by yrigny            #+#    #+#             */
-/*   Updated: 2024/05/06 10:16:33 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/06 10:18:50 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,7 @@ void	expand_env_var(t_token *token, int head)
 		while (ft_isalnum(old_str[end + 1]) || old_str[end + 1] == '_')
 			end++;
 	}
-	//printf("old str + head: %s\n", old_str + head + 1);
 	env_var_value = match_env_var(&old_str[head + 1], end - head);
-	//printf("env var value: %s\n", env_var_value);
 	new_str = assemble_new_str(old_str, env_var_value, head, end);
 	free(old_str);
 	token->value = new_str;
