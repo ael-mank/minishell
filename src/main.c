@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:16:09 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/05/06 09:55:37 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/06 10:11:59 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,26 @@ char	*get_prompt(void)
 	pwd = get_pwd();
 	finalprompt = create_prompt(user, pwd);
 	return (finalprompt);
+}
+
+void print_ms_cmds(t_list *ms_cmds)
+{
+    t_cmd *cmd;
+    int i;
+
+    while (ms_cmds)
+    {
+        cmd = (t_cmd *)ms_cmds->content;
+        printf("Command: %s\n", cmd->cmd_arr[0]);
+        printf("Arguments:\n");
+        i = 1;
+        while (cmd->cmd_arr[i])
+        {
+            printf("  %s\n", cmd->cmd_arr[i]);
+            i++;
+        }
+        ms_cmds = ms_cmds->next;
+    }
 }
 
 void	shell_routine(void)
