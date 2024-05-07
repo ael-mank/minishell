@@ -1,8 +1,8 @@
 # Variables
-CC = gcc
+CC = cc
 SRC_DIR = ./src/
 OBJ_DIR = ./obj/
-CFLAGS = -Wall -Wextra -Werror -Ilibft/include -Iinclude -Llibft
+CFLAGS = -Wall -Wextra -Werror -Ilibft/include -Iinclude
 SRC_FILES = main minishell_utils\
 			exec/exec exec/pipex exec/redir_manager exec/exec_manager\
 			syntax_checking/check_syntax syntax_checking/syntax_utils \
@@ -19,7 +19,7 @@ NAME = minishell
 MAKE := make
 VAL_HIDE	:= readline.hide
 VAL_FLAGS	:= --leak-check=full --show-leak-kinds=all -s --suppressions=$(VAL_HIDE)
-
+GNL = 0
 
 GREEN=\033[0;32m
 YELLOW=\033[0;33m
@@ -39,12 +39,12 @@ val: $(NAME)
 $(NAME): $(OBJ)
 	@cd ./libft && $(MAKE) > /dev/null && $(MAKE) bonus > /dev/null && $(MAKE) printf > /dev/null
 	@echo "$(GREEN)Built Libft ✅ $(NC)"
-	@$(CC) $(CFLAGS) -o $@ $^ -lreadline -lft
+	@$(CC) $(CFLAGS) -o $@ $^ -lreadline -Llibft -lft
 	@echo "$(BLUE)Compiled $(NAME) 💻 $(NC)"
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	@mkdir -p $(@D)
-	@$(CC) $(CFLAGS) -c $< -o $@ 
+	@$(CC) $(CFLAGS) -c $< -o $@ -D GNL=$(GNL)
 
 clean:
 	@$(RM) -rf $(OBJ_DIR)

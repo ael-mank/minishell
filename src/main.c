@@ -60,9 +60,14 @@ void	shell_routine(void)
 
 	while (1)
 	{
-		finalprompt = get_prompt();
-		line = readline(finalprompt);
-		free(finalprompt);
+		if (GNL == 1)
+			line = get_next_line(0);
+		else
+		{
+			finalprompt = get_prompt();
+			line = readline(finalprompt);
+			free(finalprompt);
+		}
 		if (!line)
 			break ;
 		if (empty_line(line))

@@ -64,6 +64,7 @@ int	exec_single_builtin(t_cmd *cmd)
 
 	cmd_name = cmd->cmd_arr[0];
 	ms = get_ms();
+	exit_code = 0;
 	if (!ft_strncmp(cmd_name, "echo", 5))
 		exit_code = ft_echo(cmd->cmd_arr);
 	else if (!ft_strncmp(cmd_name, "cd", 3))
