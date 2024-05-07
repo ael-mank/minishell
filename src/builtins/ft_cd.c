@@ -43,7 +43,7 @@ int	cd_command(t_list *env, char *path)
 	free(old_pwd);
 	if (chdir(path) != 0)
 	{
-		perror("ft_cd");
+		perror("cd");
 		return (1);
 	}
 	pwd = getcwd(NULL, 0);
