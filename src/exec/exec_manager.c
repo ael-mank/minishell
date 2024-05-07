@@ -21,7 +21,10 @@ void	exec_manager(void)
 	ms = get_ms();
 	cmds = ms->cmds;
 	nb_cmds = ft_lstsize(cmds);
+	if (nb_cmds == 0)
+		return ;
 	handle_redirections(cmds);
+	expand_fullpath(cmds);
 	if (nb_cmds == 1)
 		single_cmd_exec(cmds->content);
 	else

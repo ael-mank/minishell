@@ -111,7 +111,8 @@ void	expand_fullpath(t_list *cmds)
 	while (cmds)
 	{
 		cmd = (t_cmd *)cmds->content;
-		if (!is_builtin(cmd->cmd_arr[0]))
+		if (cmd->cmd_arr[0][0] != '.' && cmd->cmd_arr[0][0] != '/'
+			&& !is_builtin(cmd->cmd_arr[0]))
 			assemble_fullpath(cmd, cmd->cmd_arr[0], paths);
 		cmds = cmds->next;
 	}
