@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:23:50 by yrigny            #+#    #+#             */
-/*   Updated: 2024/05/03 13:41:30 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/07 22:21:43 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ void	single_cmd_exec(t_cmd *cmd)
 		get_ms()->last_exit = 1;
 		return ;
 	}
+	if (!cmd->cmd_arr)
+		return ;
 	if (is_builtin(cmd->cmd_arr[0]))
 	{
 		get_ms()->last_exit = exec_builtin(cmd);
