@@ -21,10 +21,7 @@ void	parse_token_into_cmds(t_token *tokens)
 	ms = get_ms();
 	pre_expand(tokens);
 	ms->cmds = gen_cmd_list(tokens);
-	// print_cmd_list(ms->cmds);
 	free_tokens(&tokens);
-	// if (ms->cmds)
-	// 	expand_fullpath(ms->cmds);
 }
 
 t_list	*gen_cmd_list(t_token *tokens)
@@ -33,8 +30,6 @@ t_list	*gen_cmd_list(t_token *tokens)
 	t_list	*cmd_node;
 
 	cmd_list = NULL;
-	// if (!tokens)
-	// 	return (NULL);
 	while (tokens)
 	{
 		if (tokens->value[0] == '\0')
@@ -58,10 +53,6 @@ t_list	*parse_cmd(t_token **tokens)
 	t_list	*cmd_arg;
 
 	cmd_arg = NULL;
-	// while (*tokens && (*tokens)->value[0] == '\0')
-	// 	*tokens = (*tokens)->next;
-	// if (*tokens == NULL)
-	// 	return (NULL);
 	new_cmd = ft_calloc(1, sizeof(t_cmd));
 	if (!new_cmd)
 		return (NULL);

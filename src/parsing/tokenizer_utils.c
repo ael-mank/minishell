@@ -42,7 +42,7 @@ bool	type_diff(char c1, char c2)
 		return (1);
 	return (0);
 }
-
+/*
 void	print_tokens(t_token *tokens)
 {
 	while (tokens)
@@ -50,7 +50,7 @@ void	print_tokens(t_token *tokens)
 		printf("type: %d\tvalue: [%s]\n", tokens->type, tokens->value);
 		tokens = tokens->next;
 	}
-}
+}*/
 
 void	free_tokens(t_token **tokens)
 {

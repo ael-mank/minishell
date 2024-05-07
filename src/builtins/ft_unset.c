@@ -29,14 +29,16 @@ void	unset_env_var(char *arg, t_list **env)
 	t_list	*prev;
 	t_list	*current;
 	t_env	*env_var;
+	int		len;
 
 	prev = NULL;
 	current = *env;
 	env_var = NULL;
+	len = ft_strlen(arg);
 	while (current)
 	{
 		env_var = (t_env *)current->content;
-		if (strcmp(env_var->name, arg) == 0)
+		if (ft_strncmp(env_var->name, arg, len + 1) == 0)
 		{
 			if (prev)
 				free_and_relink(prev, current);

@@ -12,6 +12,27 @@
 
 #include "minishell.h"
 
+void	edit_env_value(t_list *env, char *name, char *new_value)
+{
+	t_env	*env_var;
+	int		len;
+
+	len = ft_strlen(name);
+	while (env)
+	{
+		env_var = (t_env *)env->content;
+		if (ft_strncmp(env_var->name, name, len + 1) == 0)
+		{
+			free(env_var->value);
+			env_var->value = ft_strdup(new_value);
+			if (!env_var->value)
+				return ;
+			break ;
+		}
+		env = env->next;
+	}
+}
+
 int	cd_command(t_list *env, char *path)
 {
 	char	*old_pwd;

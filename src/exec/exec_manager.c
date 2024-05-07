@@ -31,14 +31,6 @@ void	exec_manager(void)
 		pipex(ms, cmds, nb_cmds);
 }
 
-void	update_last_exit_status(int status)
-{
-	if (WIFEXITED(status) && get_ms()->last_exit == 0)
-		get_ms()->last_exit = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status) && get_ms()->last_exit == 0)
-		get_ms()->last_exit = WTERMSIG(status);
-}
-
 void	single_cmd_exec(t_cmd *cmd)
 {
 	pid_t	pid;
@@ -68,6 +60,14 @@ void	single_cmd_exec(t_cmd *cmd)
 	setup_signals();
 }
 
+void	update_last_exit_status(int status)
+{
+	if (WIFEXITED(status) && get_ms()->last_exit == 0)
+		get_ms()->last_exit = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status) && get_ms()->last_exit == 0)
+		get_ms()->last_exit = WTERMSIG(status);
+}
+
 bool	is_builtin(char *cmd_name)
 {
 	if (!ft_strncmp(cmd_name, "echo", 5))
@@ -85,4 +85,12 @@ bool	is_builtin(char *cmd_name)
 	if (!ft_strncmp(cmd_name, "exit", 5))
 		return (1);
 	return (0);
+}
+
+void	child_free_exit(int exit_code)
+{
+	free_cmd_list();
+	free_env();
+	rl_clear_history();
+	exit(exit_code);
 }
