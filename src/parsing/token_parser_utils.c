@@ -62,7 +62,7 @@ void	free_cmd_arg_list(t_list **cmd_arg)
 		*cmd_arg = next;
 	}
 }
-
+/*
 void	print_cmd_list(t_list *cmd_list)
 {
 	t_cmd	*cmd_node;
@@ -93,24 +93,4 @@ void	print_cmd_list(t_list *cmd_list)
 		cmd_list = cmd_list->next;
 		printf("----------------------\n");
 	}
-}
-
-void	free_cmd_list(void)
-{
-	t_ms	*ms;
-	t_list	**cmd_list;
-	t_list	*next_cmd_node;
-
-	ms = get_ms();
-	cmd_list = &ms->cmds;
-	while (*cmd_list)
-	{
-		next_cmd_node = (*cmd_list)->next;
-		free_str_arr(&((t_cmd *)(*cmd_list)->content)->cmd_arr);
-		free(((t_cmd *)(*cmd_list)->content)->fullpath);
-		free_tokens(&((t_cmd *)(*cmd_list)->content)->redir);
-		free((*cmd_list)->content);
-		free(*cmd_list);
-		*cmd_list = next_cmd_node;
-	}
-}
+}*/

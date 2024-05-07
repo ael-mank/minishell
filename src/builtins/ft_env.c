@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	print_env(t_list *env)
+int	ft_env(t_list *env)
 {
 	t_list	*tmp;
 

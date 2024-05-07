@@ -12,47 +12,44 @@
 
 #include "minishell.h"
 
-char	*get_pwd(void)
+bool	init_env(char **envp, t_ms *shell)
 {
-	char	*pwd;
+	int		i;
+	t_env	*env_var;
+	t_list	*env_var_node;
 
-	pwd = getcwd(NULL, 0);
-	if (!pwd)
+	i = -1;
+	shell->env = NULL;
+	if (!envp)
+		return (0);
+	while (envp[++i])
 	{
-		while (!pwd)
-		{
-			chdir("..");
-			pwd = getcwd(NULL, 0);
-		}
+		env_var = create_env_var(envp[i]);
+		if (!env_var)
+			return (0);
+		env_var_node = ft_lstnew(env_var);
+		if (!env_var_node)
+			return (0);
+		ft_lstadd_back(&shell->env, env_var_node);
 	}
-	return (pwd);
+	return (1);
 }
 
-char	*create_prompt(char *user, char *pwd)
+void	free_env(void)
 {
-	char	*prompt;
-	char	*tempprompt;
-	char	*finalprompt;
+	t_list	*env;
+	t_list	*tmp;
 
-	prompt = ft_strjoin(user, "@");
-	tempprompt = ft_strjoin(prompt, pwd);
-	free(prompt);
-	free(pwd);
-	finalprompt = ft_strjoin(tempprompt, "$ ");
-	free(tempprompt);
-	return (finalprompt);
-}
-
-char	*get_prompt(void)
-{
-	char	*pwd;
-	char	*user;
-	char	*finalprompt;
-
-	user = match_env_var("USER", 4);
-	pwd = get_pwd();
-	finalprompt = create_prompt(user, pwd);
-	return (finalprompt);
+	env = get_ms()->env;
+	while (env)
+	{
+		tmp = env;
+		env = env->next;
+		free(((t_env *)tmp->content)->name);
+		free(((t_env *)tmp->content)->value);
+		free(tmp->content);
+		free(tmp);
+	}
 }
 
 void	shell_routine(void)
@@ -81,6 +78,13 @@ void	shell_routine(void)
 	rl_clear_history();
 }
 
+t_ms	*get_ms(void)
+{
+	static t_ms	minishell;
+
+	return (&minishell);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_ms	*ms;
@@ -88,7 +92,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	ms = get_ms();
-	if(!envp)
+	if (!envp)
 		return (EXIT_FAILURE);
 	if (init_env(envp, ms) == 0)
 		return (EXIT_FAILURE);

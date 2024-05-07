@@ -12,20 +12,16 @@
 
 #include "minishell.h"
 
-int	err(const char *msg, int ret)
-{
-	if (msg)
-		ft_printf("%s\n", msg);
-	return (ret);
-}
-
 int	ft_pwd(void)
 {
 	char	*path;
 
 	path = getcwd(NULL, 0);
 	if (!path)
-		return (err("Error getting current directory", 1));
+	{
+		ft_putstr_fd("pwd: error getting current directory\n", 2);
+		return (1);
+	}
 	ft_printf("%s\n", path);
 	free(path);
 	return (0);
