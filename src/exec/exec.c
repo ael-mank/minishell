@@ -14,7 +14,8 @@
 
 void	execute_child(t_cmd *child)
 {
-	int	exit_code;
+	int		exit_code;
+	char	**env;
 
 	if (child->fd_in == -1 || child->fd_out == -1)
 		child_free_exit(1);
@@ -33,7 +34,8 @@ void	execute_child(t_cmd *child)
 		ft_putstr_fd(": command not found\n", 2);
 		child_free_exit(127);
 	}
-	execve(child->fullpath, child->cmd_arr, NULL);
+	env = env_to_array();
+	execve(child->fullpath, child->cmd_arr, env);
 	perror("minishell");
 	child_free_exit(1);
 }
