@@ -21,12 +21,13 @@ void	sigint_handler(int sig)
 	write(1, "\n", 1);
 	get_ms()->last_exit = 130;
 	rl_on_new_line();
-	rl_replace_line("", 0);
+	rl_replace_line("", 1);
 	rl_redisplay();
 }
 
 void	child_sigint_handler(int sig)
 {
+	printf("dfgsdf ghsdfkjgh skdjfhg ksdfhgk dfjh gksjdfh g\n\n");
 	if (sig == 2)
 		get_ms()->last_exit = 130;
 	else

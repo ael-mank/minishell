@@ -14,22 +14,27 @@
 
 bool	has_expandable_dollar_str(t_token *token, int *dollar_pos)
 {
-	char	*str;
-	int		single_quote_open;
+	char	*s;
+	int		quote_open;
 
-	str = token->value;
-	single_quote_open = 0;
-	while (*str)
+	s = token->value;
+	quote_open = 0;
+	while (*s)
 	{
-		if (*str == '\'')
-			single_quote_open = (single_quote_open + 1) % 2;
-		else if (!single_quote_open && *str == '$' && ((ft_isalnum(*(str + 1))
-					|| *(str + 1) == '_') || *(str + 1) == '?'))
+		if (*s == '\'' || *s == '\"')
 		{
-			*dollar_pos = str - token->value;
+			if (quote_open == 0)
+				quote_open = *s;
+			else if (quote_open == *s)
+				quote_open = 0;
+		}
+		else if (quote_open != '\'' && *s == '$' 
+			&& ((ft_isalnum(*(s + 1)) || *(s + 1) == '_') || *(s + 1) == '?'))
+		{
+			*dollar_pos = s - token->value;
 			return (1);
 		}
-		str++;
+		s++;
 	}
 	return (0);
 }

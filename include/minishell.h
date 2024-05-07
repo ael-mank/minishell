@@ -160,6 +160,9 @@ int					is_directory(char *path);
 /* execution */
 void				exec_manager(void);
 void				execute_child(t_cmd *child);
+char				**env_to_array(void);
+char				**create_env_array(t_list *env);
+void				gen_env_dict(char **env_array, t_list *env);
 void				single_cmd_exec(t_cmd *cmd);
 bool				is_builtin(char *cmd_name);
 int					exec_builtin(t_cmd *child);
