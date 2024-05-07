@@ -13,6 +13,7 @@
 #include "minishell.h"
 
 // Might need to add sum signals handling in the exec part
+extern int		g_signal;
 
 void	sigint_handler(int sig)
 {
@@ -38,6 +39,20 @@ void	child_sigint_handler(int sig)
 
 void	setup_signals(void)
 {
+	g_signal = 0;
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
+}
+
+void	update_heredoc_signal(int sig)
+{
+	g_signal = sig;
+	get_ms()->last_exit = 130;
+}
+
+void	handle_heredoc_signal(int sig)
+{
+	g_signal = sig;
+	ft_printf("\n");
+	child_free_exit(130);
 }

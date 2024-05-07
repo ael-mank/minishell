@@ -12,42 +12,15 @@
 
 #include "minishell.h"
 
-void	handle_redirections(t_list *cmds)
-{
-	t_cmd	*curr_cmd;
-	t_token	*token;
-	int		valid_redir;
-
-	while (cmds)
-	{
-		curr_cmd = (t_cmd *)cmds->content;
-		token = curr_cmd->redir;
-		valid_redir = 1;
-		while (token && valid_redir)
-		{
-			if (token->type == TOKEN_REDIR_HEREDOC
-				|| token->type == TOKEN_REDIR_IN)
-				valid_redir = handle_redir_in(curr_cmd, token);
-			else
-				valid_redir = handle_redir_out(curr_cmd, token);
-			token = token->next;
-		}
-		if (curr_cmd->fd_out == 0)
-			curr_cmd->fd_out = STDOUT_FILENO;
-		cmds = cmds->next;
-	}
-}
+extern int	g_signal;
 
 bool	handle_redir_in(t_cmd *cmd, t_token *src)
 {
-	char	*filename;
-
 	if (src->type == TOKEN_REDIR_HEREDOC)
 	{
-		filename = gen_unique_filename((unsigned long)cmd);
-		cmd->fd_in = receive_heredoc(src->value, filename);
-		unlink(filename);
-		free(filename);
+		gen_unique_filename((unsigned long)cmd, cmd);
+		cmd->fd_in = get_heredoc(src->value, cmd->filename);
+		unlink(cmd->filename);
 	}
 	else if (src->type == TOKEN_REDIR_IN)
 		cmd->fd_in = open(src->value, O_RDONLY, 0644);
@@ -60,36 +33,58 @@ bool	handle_redir_in(t_cmd *cmd, t_token *src)
 	return (1);
 }
 
-int	receive_heredoc(char *delimiter, char *filename)
+int	get_heredoc(char *delimiter, char *filename)
 {
 	int		fd_tmp;
-	char	*line;
+	pid_t	pid;
 
 	fd_tmp = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	while (1)
+	if (g_signal != 0)
+		return (-1);
+	signal(SIGINT, &update_heredoc_signal);
+	pid = fork();
+	if (pid < 0)
 	{
-		ft_putstr_fd("> ", 1);
-		line = get_next_line(0);
-		if (!line)
-			break ;
-		if (!ft_strncmp(line, delimiter, ft_strlen(delimiter))
-			&& ft_strlen(line) == ft_strlen(delimiter) + 1)
-		{
-			free(line);
-			break ;
-		}
-		ft_putstr_fd(line, fd_tmp);
-		free(line);
+		ft_putstr_fd("unable to fork\n", 2);
+		return (-1);
 	}
+	if (pid == 0)
+	{
+		signal(SIGINT, &handle_heredoc_signal);
+		signal(SIGQUIT, SIG_IGN);
+		receive_heredoc(delimiter, fd_tmp);
+		child_free_exit(0);
+	}
+	waitpid(pid, NULL, 0);
+	signal(SIGINT, &sigint_handler);
 	close(fd_tmp);
 	return (open(filename, O_RDONLY, 0644));
 }
 
-char	*gen_unique_filename(unsigned long p)
+void	receive_heredoc(char *delimiter, int fd)
+{
+	char	*line;
+
+	line = readline("heredoc> ");
+	if (!line)
+		return ;
+	while (ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1) != 0)
+	{
+		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
+		free(line);
+		line = readline("heredoc> ");
+		if (!line)
+			return ;
+	}
+	if (line)
+		free(line);
+}
+
+void	gen_unique_filename(unsigned long p, t_cmd *cmd)
 {
 	char	address[17];
 	char	*hex_char;
-	char	*filename;
 	int		i;
 
 	hex_char = "0123456789abcdef";
@@ -97,8 +92,7 @@ char	*gen_unique_filename(unsigned long p)
 	while (++i < 16)
 		address[i] = hex_char[(p >> (4 * (15 - i))) & 0xf];
 	address[i] = '\0';
-	filename = ft_strjoin(address, ".heredoc.tmp");
-	return (filename);
+	cmd->filename = ft_strjoin(address, ".heredoc.tmp");
 }
 
 bool	handle_redir_out(t_cmd *cmd, t_token *dst)

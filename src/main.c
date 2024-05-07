@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+int		g_signal;
+
 bool	init_env(char **envp, t_ms *shell)
 {
 	int		i;
@@ -92,6 +94,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	ms = get_ms();
+	g_signal = 0;
 	if (!envp)
 		return (EXIT_FAILURE);
 	if (init_env(envp, ms) == 0)

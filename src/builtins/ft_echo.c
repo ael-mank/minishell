@@ -14,24 +14,24 @@
 
 int	ft_echo(char **args)
 {
-    int	i;
-    int	n_flag;
+	int	i;
+	int	n_flag;
 
-    i = 1;
-    n_flag = 0;
-    while (args[i] && ft_strncmp("-n", args[i], 3) == 0)
-    {
-        n_flag = 1;
-        i++;
-    }
-    while (args[i])
-    {
-        printf("%s", args[i]);
-        if (args[i + 1])
-            printf(" ");
-        i++;
-    }
-    if (!n_flag)
-        printf("\n");
-    return (0);
+	i = 1;
+	n_flag = 0;
+	while (args[i] && ft_strncmp("-n", args[i], 3) == 0)
+	{
+		n_flag = 1;
+		i++;
+	}
+	while (args[i])
+	{
+		printf("%s", args[i]);
+		if (args[i + 1])
+			printf(" ");
+		i++;
+	}
+	if (!n_flag)
+		printf("\n");
+	return (0);
 }
