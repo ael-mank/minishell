@@ -49,7 +49,10 @@ void	fork_children(int nb_cmds, t_pipe pipe_arr[MAX_PIPE], t_list *cmds)
 		}
 		pipe_arr[i].pid = fork();
 		if (pipe_arr[i].pid == -1)
+		{
+			ft_putstr_fd("unable to fork\n", 2);
 			exit(EXIT_FAILURE);
+		}
 		if (pipe_arr[i].pid == 0 && i == 0)
 			child_first(cmds->content, pipe_arr[0].fd);
 		else if (pipe_arr[i].pid == 0 && i < nb_cmds - 1)

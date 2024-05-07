@@ -51,6 +51,7 @@ typedef struct s_cmd
 {
 	char			**cmd_arr;
 	char			*fullpath;
+	char			*filename;
 	t_token			*redir;
 	int				fd_in;
 	int				fd_out;
@@ -85,15 +86,17 @@ void				shell_routine(void);
 
 /* utils */
 t_env				*create_env_var(char *envp);
-void				free_cmd_list(void);
 char				*get_prompt(void);
 char				*get_pwd(void);
 int					empty_line(char *line);
+void				child_free_exit(int exit_code);
 
 /* signals */
 void				setup_signals(void);
 void				sigint_handler(int sig);
 void				child_sigint_handler(int sig);
+void				update_heredoc_signal(int sig);
+void				handle_heredoc_signal(int sig);
 
 /* syntax check */
 t_token				*check_syntax_and_tokenize(char *line);
@@ -142,8 +145,9 @@ void				remove_quotes(t_token *token, char *old_str);
 /* redirection */
 void				handle_redirections(t_list *cmds);
 bool				handle_redir_in(t_cmd *cmd, t_token *src);
-char				*gen_unique_filename(unsigned long p);
-int					receive_heredoc(char *delimiter, char *filename);
+void				gen_unique_filename(unsigned long p, t_cmd *cmd);
+int					get_heredoc(char *delimiter, char *filename);
+void				receive_heredoc(char *delimiter, int fd);
 bool				handle_redir_out(t_cmd *cmd, t_token *dst);
 
 /* path check */
@@ -167,7 +171,6 @@ void				child_first(t_cmd *child, int pipe[2]);
 void				child_middle(t_cmd *child, int pipe1[2], int pipe2[2]);
 void				child_last(t_cmd *child, int pipe[2]);
 void				update_last_exit_status(int status);
-void				child_free_exit(int exit_code);
 
 /* builtins */
 int					ft_echo(char **args);
@@ -185,6 +188,7 @@ void				unset_env_var(char *arg, t_list **env);
 void				free_and_relink(t_list *prev, t_list *current);
 int					ft_env(t_list *env);
 int					ft_exit(char **args);
+void				free_cmd_list(void);
 int					is_input_valid(char **args);
 int					is_number(char *str);
 

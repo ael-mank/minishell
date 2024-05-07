@@ -31,6 +31,32 @@ void	exec_manager(void)
 		pipex(ms, cmds, nb_cmds);
 }
 
+void	handle_redirections(t_list *cmds)
+{
+	t_cmd	*curr_cmd;
+	t_token	*token;
+	int		valid_redir;
+
+	while (cmds)
+	{
+		curr_cmd = (t_cmd *)cmds->content;
+		token = curr_cmd->redir;
+		valid_redir = 1;
+		while (token && valid_redir)
+		{
+			if (token->type == TOKEN_REDIR_HEREDOC
+				|| token->type == TOKEN_REDIR_IN)
+				valid_redir = handle_redir_in(curr_cmd, token);
+			else
+				valid_redir = handle_redir_out(curr_cmd, token);
+			token = token->next;
+		}
+		if (curr_cmd->fd_out == 0)
+			curr_cmd->fd_out = STDOUT_FILENO;
+		cmds = cmds->next;
+	}
+}
+
 void	single_cmd_exec(t_cmd *cmd)
 {
 	pid_t	pid;
@@ -85,12 +111,4 @@ bool	is_builtin(char *cmd_name)
 	if (!ft_strncmp(cmd_name, "exit", 5))
 		return (1);
 	return (0);
-}
-
-void	child_free_exit(int exit_code)
-{
-	free_cmd_list();
-	free_env();
-	rl_clear_history();
-	exit(exit_code);
 }
