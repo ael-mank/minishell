@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:16:09 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/05/06 12:10:39 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/07 09:43:47 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,9 @@ void	shell_routine(void)
 
 	while (1)
 	{
-		if (GNL == 1)
-			line = get_next_line(0);
-		else
-		{
-			finalprompt = get_prompt();
-			line = readline(finalprompt);
-			free(finalprompt);
-		}
+		finalprompt = get_prompt();
+		line = readline(finalprompt);
+		free(finalprompt);
 		if (!line)
 			break ;
 		if (empty_line(line))
