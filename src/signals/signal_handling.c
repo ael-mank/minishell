@@ -27,7 +27,6 @@ void	sigint_handler(int sig)
 
 void	child_sigint_handler(int sig)
 {
-	printf("dfgsdf ghsdfkjgh skdjfhg ksdfhgk dfjh gksjdfh g\n\n");
 	if (sig == 2)
 		get_ms()->last_exit = 130;
 	else
