@@ -105,8 +105,6 @@ void				fork_children(int nb_cmds, t_pipe pipe_arr[MAX_PIPE],
 void				child_first(t_cmd *child, int pipe[2]);
 void				child_middle(t_cmd *child, int pipe1[2], int pipe2[2]);
 void				child_last(t_cmd *child, int pipe[2]);
-bool				cmd_exists(t_cmd *child);
-bool				cmd_is_executable(t_cmd *child);
 void				execute_child(t_cmd *child);
 int					exec_builtin(t_cmd *child);
 int					exec_single_builtin(t_cmd *cmd);
@@ -119,6 +117,8 @@ bool				handle_redir_in(t_cmd *cmd, t_token *src);
 int					receive_heredoc(char *delimiter, char *filename);
 char				*gen_unique_filename(unsigned long p);
 bool				handle_redir_out(t_cmd *cmd, t_token *dst);
+bool    			valid_path(t_cmd *child, int *exit_code);
+int					is_directory(char *path);
 
 /* tokenization */
 t_token				*tokenize(char *line);
@@ -174,7 +174,6 @@ int					ft_unset(char **args, t_list *env);
 // Signals
 void				setup_signals(void);
 void				sigint_handler(int sig);
-void				sigquit_handler(int sig);
 void				child_sigint_handler(int sig);
 
 // Syntax

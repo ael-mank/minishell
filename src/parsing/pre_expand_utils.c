@@ -101,11 +101,6 @@ void	assemble_fullpath(t_cmd *cmd, char *cmd_name, char **paths)
 	char	*tmp_cmd_path;
 	int		i;
 
-	if (access(cmd_name, F_OK) == 0)
-	{
-		cmd->fullpath = ft_strdup(cmd_name);
-		return ;
-	}
 	i = -1;
 	while (!cmd->fullpath && cmd_name && paths[++i])
 	{

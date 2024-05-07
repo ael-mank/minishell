@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	ft_isdirectory(char *path)
+int	is_directory(char *path)
 {
     struct stat	file_stat;
 
@@ -14,59 +14,59 @@ int	ft_isdirectory(char *path)
     return (0);
 }
 
-bool	cmd_exists(t_cmd *child)
-{
-    if (!child->fullpath || child->fullpath[0] == '\0')
-    {
-        if (child->cmd_arr[0] && child->cmd_arr[0][0] != '\0')
-        {
-            ft_putstr_fd(child->cmd_arr[0], 2);
-            ft_putstr_fd(": command not found\n", 2);
-            return (0);
-        }
-    }
-    return (1);
-}
-
-bool	cmd_is_executable(t_cmd *child)
-{
-    if (child->fullpath && access(child->fullpath, X_OK) != 0)
-    {
-        ft_putstr_fd("minishell: ", 2);
-        perror(child->cmd_arr[0]);
-        return (0);
-    }
-    return (1);
-}
-
 void	execute_child(t_cmd *child)
 {
-    int	builtin_exit_code;
+    int	exit_code;
 
     if (child->fd_in == -1 || child->fd_out == -1)
         child_free_exit(1);
     if (is_builtin(child->cmd_arr[0]))
     {
-        builtin_exit_code = exec_single_builtin(child);
-        child_free_exit(builtin_exit_code);
+        exit_code = exec_single_builtin(child);
+        child_free_exit(exit_code);
     }
     if (!child->cmd_arr[0] || child->cmd_arr[0][0] == '\0')
         child_free_exit(0);
-    if (!cmd_exists(child))
+    if (ft_strchr("./", child->cmd_arr[0][0])
+        && !valid_path(child, &exit_code))
+        child_free_exit(exit_code);
+    if (!child->fullpath)
+    {
+        ft_putstr_fd(child->cmd_arr[0], 2);
+        ft_putstr_fd(": command not found\n", 2);
         child_free_exit(127);
-    if (!cmd_is_executable(child))
-        child_free_exit(126);
-    if (child->fullpath && ft_isdirectory(child->fullpath) == 1)
+    }
+    execve(child->fullpath, child->cmd_arr, NULL);
+    perror("minishell");
+    child_free_exit(1);
+}
+
+bool    valid_path(t_cmd *child, int *exit_code)
+{
+    if (access(child->cmd_arr[0], F_OK) != 0)
+    {
+        ft_putstr_fd("minishell: ", 2);
+        perror(child->cmd_arr[0]);
+        *exit_code = 127;
+        return (0);
+    }
+    if (access(child->cmd_arr[0], X_OK) != 0)
+    {
+        ft_putstr_fd("minishell: ", 2);
+        perror(child->cmd_arr[0]);
+        *exit_code = 126;
+        return (0);
+    }
+    if (is_directory(child->cmd_arr[0]))
     {
         ft_putstr_fd("minishell: ", 2);
         ft_putstr_fd(child->cmd_arr[0], 2);
         ft_putstr_fd(": Is a directory\n", 2);
-        child_free_exit(126);
+        *exit_code = 126;
+        return (0);
     }
-    if (child->fullpath)
-        execve(child->fullpath, child->cmd_arr, NULL);
-    perror("minishell");
-    child_free_exit(1);
+    child->fullpath = child->cmd_arr[0];
+    return (1);
 }
 
 void	child_free_exit(int exit_code)
