@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:28:46 by yrigny            #+#    #+#             */
-/*   Updated: 2024/05/06 11:20:28 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/07 22:19:18 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,11 @@ void	expand_fullpath(t_list *cmds)
 	while (cmds)
 	{
 		cmd = (t_cmd *)cmds->content;
+		if(!cmd->cmd_arr)
+		{
+			free_str_arr(&paths);
+			return ;
+		}
 		if (cmd->cmd_arr[0][0] != '.' && cmd->cmd_arr[0][0] != '/'
 			&& !is_builtin(cmd->cmd_arr[0]))
 			assemble_fullpath(cmd, cmd->cmd_arr[0], paths);
