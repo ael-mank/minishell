@@ -167,13 +167,16 @@ void				single_cmd_exec(t_cmd *cmd);
 bool				is_builtin(char *cmd_name);
 int					exec_builtin(t_cmd *child);
 int					exec_single_builtin(t_cmd *cmd);
-void				pipex(t_ms *ms, t_list *cmds, int nb_cmds);
-void				fork_children(int nb_cmds, t_pipe pipe_arr[MAX_PIPE],
-						t_list *cmds);
-void				child_first(t_cmd *child, int pipe[2]);
-void				child_middle(t_cmd *child, int pipe1[2], int pipe2[2]);
-void				child_last(t_cmd *child, int pipe[2]);
+// void				pipex(t_ms *ms, t_list *cmds, int nb_cmds);
+// void				fork_children(int nb_cmds, t_pipe pipe_arr[MAX_PIPE],
+// 						// t_list *cmds);
+// void				child_first(t_cmd *child, int pipe[2]);
+// void				child_middle(t_cmd *child, int pipe1[2], int pipe2[2]);
+// void				child_last(t_cmd *child, int pipe[2]);
 void				update_last_exit_status(int status);
+void    pipex(t_ms *ms, t_list *cmds, int nb_cmds);
+void    child_process(int i, int nb_cmds, t_cmd *cmd, int *output_cache);
+void    execute_last_cmd(t_cmd *cmd);
 
 /* builtins */
 int					ft_echo(char **args);

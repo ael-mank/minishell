@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
+// #include "minishell.h"
+/*
 void	pipex(t_ms *ms, t_list *cmds, int nb_cmds)
 {
 	int	i;
@@ -53,6 +53,7 @@ void	fork_children(int nb_cmds, t_pipe pipe_arr[MAX_PIPE], t_list *cmds)
 			ft_putstr_fd("unable to fork\n", 2);
 			exit(EXIT_FAILURE);
 		}
+		// close_unrelated_fds(i, nb_cmds - 1, pipe_arr);
 		if (pipe_arr[i].pid == 0 && i == 0)
 			child_first(cmds->content, pipe_arr[0].fd);
 		else if (pipe_arr[i].pid == 0 && i < nb_cmds - 1)
@@ -66,6 +67,7 @@ void	fork_children(int nb_cmds, t_pipe pipe_arr[MAX_PIPE], t_list *cmds)
 
 void	child_first(t_cmd *child, int pipe[2])
 {
+	// printf("//////Child process %s (PID: %d) executing...\n", child->cmd_arr[0], getpid());
 	if (child->fd_in != STDIN_FILENO)
 		dup2(child->fd_in, STDIN_FILENO);
 	if (child->fd_out == STDOUT_FILENO)
@@ -81,6 +83,7 @@ void	child_first(t_cmd *child, int pipe[2])
 
 void	child_middle(t_cmd *child, int pipe1[2], int pipe2[2])
 {
+	// printf("//////Child process %s (PID: %d) executing...\n", child->cmd_arr[0], getpid());
 	if (child->fd_in == STDIN_FILENO)
 		dup2(pipe1[0], STDIN_FILENO);
 	else if (child->fd_in != STDIN_FILENO)
@@ -102,6 +105,7 @@ void	child_middle(t_cmd *child, int pipe1[2], int pipe2[2])
 
 void	child_last(t_cmd *child, int pipe[2])
 {
+	// printf("//////Child process %s (PID: %d) executing...\n", child->cmd_arr[0], getpid());
 	if (child->fd_in == STDIN_FILENO)
 		dup2(pipe[0], STDIN_FILENO);
 	else if (child->fd_in != STDIN_FILENO)
@@ -114,3 +118,4 @@ void	child_last(t_cmd *child, int pipe[2])
 	close(pipe[1]);
 	execute_child(child);
 }
+*/
