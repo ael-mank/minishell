@@ -1,1 +1,4 @@
+.gitignore
 **/obj/
+minishell
+libft.a
