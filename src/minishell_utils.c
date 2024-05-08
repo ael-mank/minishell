@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrigny <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:56:01 by yrigny            #+#    #+#             */
-/*   Updated: 2024/04/12 16:56:03 by yrigny           ###   ########.fr       */
+/*   Updated: 2024/05/08 20:31:00 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ char	*get_prompt(void)
 	char	*finalprompt;
 
 	user = match_env_var("USER", 4);
+	if (ft_strncmp(user, "", 1) == 0)
+		user = ft_strdup("minishell");
 	pwd = get_pwd();
 	temp_1 = ft_strjoin(user, "@");
 	temp_2 = ft_strjoin(temp_1, pwd);
