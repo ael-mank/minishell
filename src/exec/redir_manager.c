@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_manager.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrigny <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:24:00 by yrigny            #+#    #+#             */
-/*   Updated: 2024/05/02 16:24:01 by yrigny           ###   ########.fr       */
+/*   Updated: 2024/05/08 10:46:15 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ int	get_heredoc(char *delimiter, char *filename)
 	pid_t	pid;
 
 	fd_tmp = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	if (g_signal != 0)
-		return (-1);
 	signal(SIGINT, &update_heredoc_signal);
 	pid = fork();
 	if (pid < 0)
