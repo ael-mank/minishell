@@ -59,13 +59,15 @@ void	fork_children(int nb_cmds, t_pipe pipe_arr[MAX_PIPE], t_list *cmds)
 			child_middle(cmds->content, pipe_arr[i - 1].fd, pipe_arr[i].fd);
 		else if (pipe_arr[i].pid == 0 && i == nb_cmds - 1)
 			child_last(cmds->content, pipe_arr[i - 1].fd);
-		cmds = cmds->next;
+		else
+			cmds = cmds->next;
 	}
 }
 
 void	child_first(t_cmd *child, int pipe[2])
 {
-	dup2(child->fd_in, STDIN_FILENO);
+	if (child->fd_in != STDIN_FILENO)
+		dup2(child->fd_in, STDIN_FILENO);
 	if (child->fd_out == STDOUT_FILENO)
 		dup2(pipe[1], STDOUT_FILENO);
 	else if (child->fd_out != STDOUT_FILENO)
@@ -107,7 +109,8 @@ void	child_last(t_cmd *child, int pipe[2])
 		dup2(child->fd_in, STDIN_FILENO);
 		close(pipe[0]);
 	}
-	dup2(child->fd_out, STDOUT_FILENO);
+	if (child->fd_out != STDOUT_FILENO)
+		dup2(child->fd_out, STDOUT_FILENO);
 	close(pipe[1]);
 	execute_child(child);
 }
