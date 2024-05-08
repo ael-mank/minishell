@@ -63,11 +63,8 @@ void	single_cmd_exec(t_cmd *cmd)
 	int		status;
 
 	if (cmd->fd_in == -1 || cmd->fd_out == -1)
-	{
 		get_ms()->last_exit = 1;
-		return ;
-	}
-	if (!cmd->cmd_arr)
+	if (cmd->fd_in == -1 || cmd->fd_out == -1 || !cmd->cmd_arr)
 		return ;
 	if (is_builtin(cmd->cmd_arr[0]))
 	{

@@ -55,7 +55,7 @@ int	exec_builtin(t_cmd *child)
 	exit_code = exec_single_builtin(child);
 	if (child->fd_out != STDOUT_FILENO)
 		dup2(original, STDOUT_FILENO);
-	return (0 || exit_code);
+	return (exit_code);
 }
 
 int	exec_single_builtin(t_cmd *cmd)

@@ -27,6 +27,7 @@ void	sigint_handler(int sig)
 
 void	child_sigint_handler(int sig)
 {
+	g_signal = sig;
 	if (sig == 2)
 		get_ms()->last_exit = 130;
 	else
