@@ -4,7 +4,7 @@ SRC_DIR = ./src/
 OBJ_DIR = ./obj/
 CFLAGS = -Wall -Wextra -Werror -Ilibft/include -Iinclude
 SRC_FILES = main minishell_utils\
-			exec/exec exec/pipex_1 exec/redir_manager exec/exec_manager\
+			exec/exec exec/exec_utils exec/pipex_1 exec/pipex_2 exec/redir_manager exec/exec_manager\
 			syntax_checking/check_syntax syntax_checking/syntax_utils \
 			signals/signal_handling \
 			builtins/ft_pwd builtins/ft_cd builtins/ft_echo builtins/ft_env builtins/ft_export\

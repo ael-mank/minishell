@@ -6,45 +6,31 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:23:50 by yrigny            #+#    #+#             */
-/*   Updated: 2024/05/09 12:50:58 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/09 16:08:24 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	any_cmd_failed(t_list *cmds)
-{
-    t_cmd	*curr_cmd;
-
-    while (cmds)
-    {
-        curr_cmd = (t_cmd *)cmds->content;
-        if (curr_cmd->fd_in == -1 || curr_cmd->fd_out == -1)
-            return (1);
-        cmds = cmds->next;
-    }
-    return (0);
-}
-
 void	exec_manager(void)
 {
-    t_ms	*ms;
-    t_list	*cmds;
-    int		nb_cmds;
+	t_ms	*ms;
+	t_list	*cmds;
+	int		nb_cmds;
 
-    ms = get_ms();
-    cmds = ms->cmds;
-    nb_cmds = ft_lstsize(cmds);
-    if (nb_cmds == 0)
-        return ;
-    handle_redirections(cmds);
-    if (any_cmd_failed(cmds)) // Check if any command failed
-        ms->last_exit = 1; // Set the exit status to 1
-    expand_fullpath(cmds);
-    if (nb_cmds == 1)
-        single_cmd_exec(cmds->content);
-    else
-        pipex(ms, cmds, nb_cmds);
+	ms = get_ms();
+	cmds = ms->cmds;
+	nb_cmds = ft_lstsize(cmds);
+	if (nb_cmds == 0)
+		return ;
+	handle_redirections(cmds);
+	if (any_cmd_failed(cmds))
+		ms->last_exit = 1;
+	expand_fullpath(cmds);
+	if (nb_cmds == 1)
+		single_cmd_exec(cmds->content);
+	else
+		pipex(ms, cmds, nb_cmds);
 }
 
 void	handle_redirections(t_list *cmds)
