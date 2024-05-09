@@ -18,7 +18,7 @@ OBJ = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
 NAME = minishell
 MAKE := make
 VAL_HIDE	:= readline.hide
-VAL_FLAGS	:= --leak-check=full --show-leak-kinds=all -s --suppressions=$(VAL_HIDE)
+VAL_FLAGS	:= --leak-check=full --show-leak-kinds=all -s --track-fds=yes  --trace-children=yes --suppressions=$(VAL_HIDE)
 GNL = 0
 
 GREEN=\033[0;32m

@@ -3,106 +3,118 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrigny <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:34:58 by yrigny            #+#    #+#             */
-/*   Updated: 2024/05/08 22:35:01 by yrigny           ###   ########.fr       */
+/*   Updated: 2024/05/09 11:55:16 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    pipex(t_ms *ms, t_list *cmds, int nb_cmds)
+void	pipex(t_ms *ms, t_list *cmds, int nb_cmds)
 {
-    int i;
-    int output_cache;
-    t_cmd   *curr_cmd;
+	int		i;
+	int		output_cache;
+	t_cmd	*curr_cmd;
+	int		status;
 
-    (void)ms;
-    i = 1;
-    output_cache = 0;
-    while (i < nb_cmds)
-    {
-        curr_cmd = (t_cmd *)cmds->content;
-        child_process(i, nb_cmds, curr_cmd, &output_cache);
-        printf("cache fd num = %d\n", output_cache);
-        cmds = cmds->next;
-        i++;
-    }
-    if (i == nb_cmds)
-    {
-        curr_cmd = (t_cmd *)cmds->content;
-        if (curr_cmd->fd_in == STDIN_FILENO)
-            dup2(output_cache, STDIN_FILENO);
-        else if (curr_cmd->fd_in != STDIN_FILENO)
-            dup2(curr_cmd->fd_in, STDIN_FILENO);
-        if (curr_cmd->fd_out != STDOUT_FILENO)
-            dup2(curr_cmd->fd_out, STDOUT_FILENO);
-        execute_last_cmd(curr_cmd);
-    }
+	(void)ms;
+	i = 1;
+	output_cache = STDIN_FILENO; // Initialize output cache to STDIN
+	while (cmds)
+	{
+		curr_cmd = (t_cmd *)cmds->content;
+		child_process(i, nb_cmds, curr_cmd, &output_cache);
+		cmds = cmds->next;
+		i++;
+	}
+	i = -1;
+	while (++i < nb_cmds)
+		waitpid(ms->pipe[i].pid, &status, 0);
+	if (WIFEXITED(status))
+		get_ms()->last_exit = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		get_ms()->last_exit = WTERMSIG(status);
 }
 
-void    child_process(int i, int nb_cmds, t_cmd *cmd, int *output_cache)
+void	child_process(int i, int nb_cmds, t_cmd *cmd, int *output_fd)
 {
-    pid_t   pid;
-    int     fd[2];
+	int		fd[2];
+	t_ms	*ms;
 
-    if (pipe(fd) == -1)
-        ft_putstr_fd("unable to pipe\n", 2);
-    pid = fork();
-    if (pid == -1)
-        ft_putstr_fd("unable to fork\n", 2);
-    if (pid == 0)
-    {
-        if (i == 1)
-        {
-            printf("cmd1: pipe_in=%d pipe_out=%d\n", fd[1], fd[0]);
-            close(fd[0]);
-            if (cmd->fd_in != STDIN_FILENO)
-                dup2(cmd->fd_in, STDIN_FILENO);
-            if (cmd->fd_out == STDOUT_FILENO)
-                dup2(fd[1], STDOUT_FILENO);
-            else if (cmd->fd_out != STDOUT_FILENO)
-            {
-                dup2(cmd->fd_out, STDOUT_FILENO);
-                close(fd[1]);
-            }
-        }
-        if (i < nb_cmds)
-        {
-            printf("cmd2: pipe_in=%d pipe_out=%d\n", fd[1], fd[0]);
-            printf("cache fd num = %d\n", *output_cache);
-            if (cmd->fd_in == STDIN_FILENO)
-                dup2(*output_cache, STDIN_FILENO);
-            else if (cmd->fd_in != STDIN_FILENO)
-            {
-                close(*output_cache);
-                dup2(cmd->fd_in, STDIN_FILENO);
-            }
-            if (cmd->fd_out == STDOUT_FILENO)
-                dup2(fd[1], STDOUT_FILENO);
-            else if (cmd->fd_out != STDOUT_FILENO)
-            {
-                close(fd[1]);
-                dup2(cmd->fd_out, STDOUT_FILENO);
-            }
-        }
-        execute_child(cmd);
-        perror("minishell");
-	    child_free_exit(1);
-    }
-    else
-    {
-        close(fd[1]);
-        close(fd[0]);
-        *output_cache = fd[0];
-        waitpid(pid, NULL, 0);
-    }
+	// pid_t	pid;
+	ms = get_ms();
+	if (pipe(fd) == -1)
+	{
+		perror("pipe");
+		exit(EXIT_FAILURE);
+	}
+	ms->pids[i] = fork();
+	if (ms->pids[i] == -1)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	if (ms->pids[i] == 0)
+	{
+		close(fd[0]); // Close unused read end
+		if (cmd->fd_in != STDIN_FILENO)
+		{
+			if (dup2(cmd->fd_in, STDIN_FILENO) == -1)
+			{
+				perror("dup2");
+				exit(EXIT_FAILURE);
+			}
+			close(cmd->fd_in);
+		}
+		else if (i != 1)
+		{
+			if (dup2(*output_fd, STDIN_FILENO) == -1)
+			{
+				perror("dup2");
+				exit(EXIT_FAILURE);
+			}
+			close(*output_fd);
+		}
+		if (i < nb_cmds)
+		{
+			if (dup2(fd[1], STDOUT_FILENO) == -1)
+			{
+				perror("dup2");
+				exit(EXIT_FAILURE);
+			}
+			close(fd[1]); // Close unused write end
+		}
+		else
+		{
+			if (cmd->fd_out != STDOUT_FILENO)
+			{
+				if (dup2(cmd->fd_out, STDOUT_FILENO) == -1)
+				{
+					perror("dup2");
+					exit(EXIT_FAILURE);
+				}
+				close(cmd->fd_out);
+			}
+			close(fd[1]); // Close write end in the last command
+		}
+		execute_child(cmd);  // Execu		e the command
+		perror("minishell"); // Report errors
+		exit(EXIT_FAILURE);  // Exit child process
+	}
+	else
+	{
+		close(fd[1]); // Close unused write end
+		if (*output_fd != STDIN_FILENO)
+			close(*output_fd); // Close previous output file descriptorouais
+		*output_fd = fd[0];    // Update output file descriptor for next command
+	}
 }
 
-void    execute_last_cmd(t_cmd *cmd)
+void	execute_last_cmd(t_cmd *cmd)
 {
-	char	**env;
+	char **env;
 
 	if (cmd->fd_in == -1 || cmd->fd_out == -1)
 		get_ms()->last_exit = 1;
@@ -110,7 +122,8 @@ void    execute_last_cmd(t_cmd *cmd)
 		get_ms()->last_exit = 0;
 	if (is_builtin(cmd->cmd_arr[0]))
 		get_ms()->last_exit = exec_single_builtin(cmd);
-	if (ft_strchr("./", cmd->cmd_arr[0][0]) && !valid_path(cmd, &get_ms()->last_exit))
+	if (ft_strchr("./", cmd->cmd_arr[0][0]) && !valid_path(cmd,
+			&get_ms()->last_exit))
 		return ;
 	if (!cmd->fullpath)
 	{
@@ -121,4 +134,6 @@ void    execute_last_cmd(t_cmd *cmd)
 	env = env_to_array();
 	execve(cmd->fullpath, cmd->cmd_arr, env);
 	perror("minishell");
+	close(cmd->fd_in);
+	close(cmd->fd_out);
 }
