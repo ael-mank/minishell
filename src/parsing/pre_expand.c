@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:28:46 by yrigny            #+#    #+#             */
-/*   Updated: 2024/05/07 22:19:18 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/09 21:05:38 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,24 +19,9 @@ void	expand_dollar_str(char **p_str)
 	dollar_pos = 0;
 	while (has_expandable_dollar_str(*p_str, &dollar_pos))
 	{
-		//printf("entering expand_env_var function\n");
 		expand_env_var(p_str, dollar_pos);
 	}
 }
-
-// void	pre_expand(t_token *tokens)
-// {
-// 	int	dollar_pos;
-
-// 	while (tokens)
-// 	{
-// 		dollar_pos = 0;
-// 		while (has_expandable_dollar_str(tokens, &dollar_pos))
-// 			expand_env_var(tokens, dollar_pos);
-// 		remove_quotes(tokens, tokens->value);
-// 		tokens = tokens->next;
-// 	}
-// }
 
 void	expand_env_var(char **p_old_str, int head)
 {

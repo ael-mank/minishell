@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:23:50 by yrigny            #+#    #+#             */
-/*   Updated: 2024/05/09 20:41:04 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/09 21:04:47 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	exec_manager(void)
 	ms = get_ms();
 	cmds = ms->cmds;
 	nb_cmds = ft_lstsize(cmds);
-	// printf("nb_cmds=%d\n", nb_cmds);
 	if (nb_cmds == 0)
 		return ;
 	if (nb_cmds > MAX_PIPE)
