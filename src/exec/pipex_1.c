@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:34:58 by yrigny            #+#    #+#             */
-/*   Updated: 2024/05/09 12:29:24 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/09 13:01:50 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	pipex(t_ms *ms, t_list *cmds, int nb_cmds)
 
 	(void)ms;
 	i = 1;
-	output_cache = STDIN_FILENO; // Initialize output cache to STDIN
+	output_cache = STDIN_FILENO;
 	while (cmds)
 	{
 		curr_cmd = (t_cmd *)cmds->content;
@@ -68,43 +68,43 @@ void	handle_last_command(t_cmd *cmd, int *fd)
 }
 
 void	handle_child_process(int i, int nb_cmds, t_cmd *cmd, int *fd,
-		int *output_fd)
+        int *output_fd)
 {
-	close(fd[0]); // Close unused read end
-	if (cmd->fd_in != STDIN_FILENO)
-	{
-		if (dup2(cmd->fd_in, STDIN_FILENO) == -1)
-		{
-			perror("dup2");
-			exit(EXIT_FAILURE);
-		}
-		close(cmd->fd_in);
-	}
-	else if (i != 1)
-	{
-		if (dup2(*output_fd, STDIN_FILENO) == -1)
-		{
-			perror("dup2");
-			exit(EXIT_FAILURE);
-		}
-		close(*output_fd);
-	}
-	if (i < nb_cmds)
-	{
-		if (dup2(fd[1], STDOUT_FILENO) == -1)
-		{
-			perror("dup2");
-			exit(EXIT_FAILURE);
-		}
-		close(fd[1]); // Close unused write end
-	}
-	else
-	{
-		handle_last_command(cmd, fd);
-	}
-	execute_child(cmd);  // Execute the command
-	perror("minishell"); // Report errors
-	exit(EXIT_FAILURE);  // Exit child process
+    close(fd[0]); // Close unused read end
+    if (cmd->fd_in != STDIN_FILENO)
+    {
+        if (dup2(cmd->fd_in, STDIN_FILENO) == -1)
+        {
+            perror("dup2");
+            exit(EXIT_FAILURE);
+        }
+        close(cmd->fd_in);
+    }
+    else if (i != 1)
+    {
+        if (dup2(*output_fd, STDIN_FILENO) == -1)
+        {
+            perror("dup2");
+            exit(EXIT_FAILURE);
+        }
+        close(*output_fd);
+    }
+    if (i < nb_cmds)
+    {
+        if (dup2(fd[1], STDOUT_FILENO) == -1)
+        {
+            perror("dup2");
+            exit(EXIT_FAILURE);
+        }
+        close(fd[1]); // Close unused write end
+    }
+    else
+    {
+        handle_last_command(cmd, fd);
+    }
+    execute_child(cmd);  // Execute the command
+    perror("minishell"); // Report errors
+    exit(EXIT_FAILURE);  // Exit child process
 }
 
 void	handle_parent_process(int *fd, int *output_fd)
@@ -117,19 +117,19 @@ void	handle_parent_process(int *fd, int *output_fd)
 
 void	child_process(int i, int nb_cmds, t_cmd *cmd, int *output_fd)
 {
-	int		fd[2];
-	t_ms	*ms;
+    int		fd[2];
+    t_ms	*ms;
 
-	ms = get_ms();
-	handle_pipe(fd, ms, i);
-	if (ms->pids[i] == 0)
-	{
-		handle_child_process(i, nb_cmds, cmd, fd, output_fd);
-	}
-	else
-	{
-		handle_parent_process(fd, output_fd);
-	}
+    ms = get_ms();
+    handle_pipe(fd, ms, i);
+    if (ms->pids[i] == 0)
+    {
+        handle_child_process(i, nb_cmds, cmd, fd, output_fd);
+    }
+    else
+    {
+        handle_parent_process(fd, output_fd);
+    }
 }
 
 void	execute_last_cmd(t_cmd *cmd)
