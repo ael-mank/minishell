@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 12:14:29 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/05/06 11:20:49 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/09 20:08:31 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,16 @@ void	handle_heredoc_signal(int sig)
 	g_signal = sig;
 	ft_printf("\n");
 	child_free_exit(130);
+}
+
+void	heredoc_free_exit(int exit_code)
+{
+	int	fd;
+
+	fd = get_ms()->fd_heredoc;
+	close(fd);
+	free_cmd_list();
+	free_env();
+	rl_clear_history();
+	exit(exit_code);
 }

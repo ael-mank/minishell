@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:24:00 by yrigny            #+#    #+#             */
-/*   Updated: 2024/05/09 16:06:33 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/09 20:06:55 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,11 @@ extern int	g_signal;
 
 bool	handle_redir_in(t_cmd *cmd, t_token *src)
 {
-	if (src->type == TOKEN_REDIR_HEREDOC)
+	if (src->type == TOKEN_REDIR_HEREDOC
+		|| src->type == TOKEN_REDIR_HEREDOC_WEXP)
 	{
 		gen_unique_filename((unsigned long)cmd, cmd);
-		cmd->fd_in = get_heredoc(src->value, cmd->filename);
+		cmd->fd_in = get_heredoc(src, cmd->filename);
 		unlink(cmd->filename);
 	}
 	else if (src->type == TOKEN_REDIR_IN)
@@ -33,12 +34,13 @@ bool	handle_redir_in(t_cmd *cmd, t_token *src)
 	return (1);
 }
 
-int	get_heredoc(char *delimiter, char *filename)
+int	get_heredoc(t_token *src, char *filename)
 {
 	int		fd_tmp;
 	pid_t	pid;
 
 	fd_tmp = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	get_ms()->fd_heredoc = fd_tmp;
 	signal(SIGINT, &update_heredoc_signal);
 	pid = fork();
 	if (pid < 0)
@@ -50,7 +52,7 @@ int	get_heredoc(char *delimiter, char *filename)
 	{
 		signal(SIGINT, &handle_heredoc_signal);
 		signal(SIGQUIT, SIG_IGN);
-		receive_heredoc(delimiter, fd_tmp);
+		receive_heredoc(src->type, src->value, fd_tmp);
 		child_free_exit(0);
 	}
 	waitpid(pid, NULL, 0);
@@ -59,13 +61,15 @@ int	get_heredoc(char *delimiter, char *filename)
 	return (open(filename, O_RDONLY, 0644));
 }
 
-void	receive_heredoc(char *delimiter, int fd)
+void	receive_heredoc(t_token_type type, char *delimiter, int fd)
 {
 	char	*line;
 
 	line = readline("heredoc> ");
 	if (!line)
 		return ;
+	if (type == TOKEN_REDIR_HEREDOC_WEXP)
+		expand_dollar_str(&line);
 	while (ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1) != 0)
 	{
 		write(fd, line, ft_strlen(line));
@@ -74,6 +78,8 @@ void	receive_heredoc(char *delimiter, int fd)
 		line = readline("heredoc> ");
 		if (!line)
 			return ;
+		if (type == TOKEN_REDIR_HEREDOC_WEXP)
+			expand_dollar_str(&line);
 	}
 	if (line)
 		free(line);

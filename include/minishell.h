@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:36:17 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/05/09 17:19:06 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/09 20:07:47 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ typedef struct s_ms
 	pid_t			pids[1024];
 	t_pipe			pipe[MAX_PIPE];
 	int				last_exit;
+	int				fd_heredoc;
 }					t_ms;
 
 /* structure */
@@ -127,17 +128,21 @@ void				free_tokens(t_token **tokens);
 void				parse_token_into_cmds(t_token *tokens);
 t_list				*gen_cmd_list(t_token *tokens);
 t_list				*parse_cmd(t_token **tokens);
-void				parse_redir(char *file, t_token **redir_list,
-						t_token **tokens);
+// void				parse_redir(char *file, t_token **redir_list,
+						// t_token **tokens);
+void	parse_redir(t_token **redir_list, t_token **tokens);
 void				parse_cmd_and_arg(t_list **cmd_arg, t_token **tokens);
 void				reform_as_cmd_arr(t_list *cmd_arg, t_cmd *cmd);
 void				free_cmd_arg_list(t_list **cmd_arg);
 void				free_str_arr(char ***p_str_arr);
 
 /* expansion */
-void				pre_expand(t_token *tokens);
-bool				has_expandable_dollar_str(t_token *token, int *dollar_pos);
-void				expand_env_var(t_token *token, int head);
+// void				pre_expand(t_token *tokens);
+void	expand_dollar_str(char **str);
+// bool				has_expandable_dollar_str(t_token *token, int *dollar_pos);
+bool	has_expandable_dollar_str(char *original, int *dollar_pos);
+// void				expand_env_var(t_token *token, int head);
+void	expand_env_var(char **p_old_str, int head);
 char				*match_env_var(char *name, int len);
 char				*assemble_new_str(char *old_str, char *value, int head,
 						int end);
@@ -148,8 +153,10 @@ void				remove_quotes(t_token *token, char *old_str);
 void				handle_redirections(t_list *cmds);
 bool				handle_redir_in(t_cmd *cmd, t_token *src);
 void				gen_unique_filename(unsigned long p, t_cmd *cmd);
-int					get_heredoc(char *delimiter, char *filename);
-void				receive_heredoc(char *delimiter, int fd);
+// int					get_heredoc(char *delimiter, char *filename);
+int	get_heredoc(t_token *src, char *filename);
+// void				receive_heredoc(char *delimiter, int fd);
+void	receive_heredoc(t_token_type type, char *delimiter, int fd);
 bool				handle_redir_out(t_cmd *cmd, t_token *dst);
 
 /* path check */
