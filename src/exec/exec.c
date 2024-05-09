@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 04:24:10 by yrigny            #+#    #+#             */
-/*   Updated: 2024/05/09 10:23:37 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/09 12:12:35 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	execute_child(t_cmd *child)
 {
 	int		exit_code;
-	char	**env;
 
 	if (child->fd_in == -1 || child->fd_out == -1)
 		child_free_exit(1);
@@ -34,12 +33,12 @@ void	execute_child(t_cmd *child)
 		ft_putstr_fd(": command not found\n", 2);
 		child_free_exit(127);
 	}
-	env = env_to_array();
-    execve(child->fullpath, child->cmd_arr, env);
-    perror("minishell");
-    close(child->fd_in);
-    close(child->fd_out);
-    child_free_exit(1);
+	char **(env) = env_to_array();
+	execve(child->fullpath, child->cmd_arr, env);
+	perror("minishell");
+	close(child->fd_in);
+	close(child->fd_out);
+	child_free_exit(1);
 }
 
 int	exec_builtin(t_cmd *child)
