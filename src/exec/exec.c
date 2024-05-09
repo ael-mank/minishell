@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 04:24:10 by yrigny            #+#    #+#             */
-/*   Updated: 2024/05/09 12:12:35 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/09 16:56:52 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	exec_single_builtin(t_cmd *cmd)
 	else if (!ft_strncmp(cmd_name, "unset", 6))
 		exit_code = ft_unset(cmd->cmd_arr, ms->env);
 	else if (!ft_strncmp(cmd_name, "env", 4))
-		exit_code = ft_env(ms->env);
+		exit_code = ft_env(ms->env, cmd->cmd_arr);
 	else if (!ft_strncmp(cmd_name, "exit", 5))
 		exit_code = ft_exit(cmd->cmd_arr);
 	return (exit_code);

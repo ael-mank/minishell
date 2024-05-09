@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:36:17 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/05/06 11:49:42 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/09 17:19:06 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef enum e_token_type
 	TOKEN_PIPE,
 	TOKEN_REDIR_IN,
 	TOKEN_REDIR_HEREDOC,
+	TOKEN_REDIR_HEREDOC_WEXP,
 	TOKEN_REDIR_OUT,
 	TOKEN_REDIR_APPEND,
 }					t_token_type;
@@ -55,6 +56,7 @@ typedef struct s_cmd
 	t_token			*redir;
 	int				fd_in;
 	int				fd_out;
+	int				*i;
 }					t_cmd;
 
 typedef struct s_env
@@ -165,6 +167,7 @@ char				**create_env_array(t_list *env);
 void				gen_env_dict(char **env_array, t_list *env);
 void				single_cmd_exec(t_cmd *cmd);
 bool				is_builtin(char *cmd_name);
+bool				any_cmd_failed(t_list *cmds);
 int					exec_builtin(t_cmd *child);
 int					exec_single_builtin(t_cmd *cmd);
 // void				pipex(t_ms *ms, t_list *cmds, int nb_cmds);
@@ -174,9 +177,14 @@ int					exec_single_builtin(t_cmd *cmd);
 // void				child_middle(t_cmd *child, int pipe1[2], int pipe2[2]);
 // void				child_last(t_cmd *child, int pipe[2]);
 void				update_last_exit_status(int status);
-void    pipex(t_ms *ms, t_list *cmds, int nb_cmds);
-void    child_process(int i, int nb_cmds, t_cmd *cmd, int *output_cache);
-void    execute_last_cmd(t_cmd *cmd);
+void				pipex(t_ms *ms, t_list *cmds, int nb_cmds);
+void				child_process(int i, int nb_cmds, t_cmd *cmd,
+						int *output_cache);
+void				handle_pipe(int *fd, t_ms *ms, int i);
+void				handle_parent_process(int *fd, int *output_fd);
+void				handle_child_input(t_cmd *cmd, int *fd, int *output_fd);
+void				handle_child_output(int nb_cmds, t_cmd *cmd, int *fd,
+						int *output_fd);
 
 /* builtins */
 int					ft_echo(char **args);
@@ -192,7 +200,7 @@ void				export_invalid_msg(char *arg);
 int					ft_unset(char **args, t_list *env);
 void				unset_env_var(char *arg, t_list **env);
 void				free_and_relink(t_list *prev, t_list *current);
-int					ft_env(t_list *env);
+int					ft_env(t_list *envm, char **args);
 int					ft_exit(char **args);
 void				free_cmd_list(void);
 int					is_input_valid(char **args);

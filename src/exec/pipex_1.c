@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/08 22:34:58 by yrigny            #+#    #+#             */
-/*   Updated: 2024/05/09 13:01:50 by ael-mank         ###   ########.fr       */
+/*   Created: 2024/05/09 16:04:56 by ael-mank          #+#    #+#             */
+/*   Updated: 2024/05/09 16:17:01 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,96 +64,59 @@ void	handle_last_command(t_cmd *cmd, int *fd)
 		}
 		close(cmd->fd_out);
 	}
-	close(fd[1]); // Close write end in the last command
+	close(fd[1]);
 }
 
-void	handle_child_process(int i, int nb_cmds, t_cmd *cmd, int *fd,
-        int *output_fd)
+void	handle_child_input(t_cmd *cmd, int *fd, int *output_fd)
 {
-    close(fd[0]); // Close unused read end
-    if (cmd->fd_in != STDIN_FILENO)
-    {
-        if (dup2(cmd->fd_in, STDIN_FILENO) == -1)
-        {
-            perror("dup2");
-            exit(EXIT_FAILURE);
-        }
-        close(cmd->fd_in);
-    }
-    else if (i != 1)
-    {
-        if (dup2(*output_fd, STDIN_FILENO) == -1)
-        {
-            perror("dup2");
-            exit(EXIT_FAILURE);
-        }
-        close(*output_fd);
-    }
-    if (i < nb_cmds)
-    {
-        if (dup2(fd[1], STDOUT_FILENO) == -1)
-        {
-            perror("dup2");
-            exit(EXIT_FAILURE);
-        }
-        close(fd[1]); // Close unused write end
-    }
-    else
-    {
-        handle_last_command(cmd, fd);
-    }
-    execute_child(cmd);  // Execute the command
-    perror("minishell"); // Report errors
-    exit(EXIT_FAILURE);  // Exit child process
-}
-
-void	handle_parent_process(int *fd, int *output_fd)
-{
-	close(fd[1]); // Close unused write end
-	if (*output_fd != STDIN_FILENO)
-		close(*output_fd); // Close previous output file descriptor
-	*output_fd = fd[0];    // Update output file descriptor for next command
-}
-
-void	child_process(int i, int nb_cmds, t_cmd *cmd, int *output_fd)
-{
-    int		fd[2];
-    t_ms	*ms;
-
-    ms = get_ms();
-    handle_pipe(fd, ms, i);
-    if (ms->pids[i] == 0)
-    {
-        handle_child_process(i, nb_cmds, cmd, fd, output_fd);
-    }
-    else
-    {
-        handle_parent_process(fd, output_fd);
-    }
-}
-
-void	execute_last_cmd(t_cmd *cmd)
-{
-	char **env;
-
-	if (cmd->fd_in == -1 || cmd->fd_out == -1)
-		get_ms()->last_exit = 1;
-	if (!cmd->cmd_arr[0] || cmd->cmd_arr[0][0] == '\0')
-		get_ms()->last_exit = 0;
-	if (is_builtin(cmd->cmd_arr[0]))
-		get_ms()->last_exit = exec_single_builtin(cmd);
-	if (ft_strchr("./", cmd->cmd_arr[0][0]) && !valid_path(cmd,
-			&get_ms()->last_exit))
-		return ;
-	if (!cmd->fullpath)
+	close(fd[0]);
+	if (cmd->fd_in != STDIN_FILENO)
 	{
-		ft_putstr_fd(cmd->cmd_arr[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-		get_ms()->last_exit = 127;
+		close(*output_fd);
+		if (dup2(cmd->fd_in, STDIN_FILENO) == -1)
+		{
+			perror("dup2");
+			exit(EXIT_FAILURE);
+		}
+		close(cmd->fd_in);
 	}
-	env = env_to_array();
-	execve(cmd->fullpath, cmd->cmd_arr, env);
+	else if (*cmd->i != 1)
+	{
+		if (dup2(*output_fd, STDIN_FILENO) == -1)
+		{
+			perror("dup2");
+			exit(EXIT_FAILURE);
+		}
+		close(*output_fd);
+	}
+}
+
+void	handle_child_output(int nb_cmds, t_cmd *cmd, int *fd, int *output_fd)
+{
+	if (cmd->fd_out != STDOUT_FILENO)
+	{
+		close(*output_fd);
+		if (dup2(cmd->fd_out, STDOUT_FILENO) == -1)
+		{
+			perror("dup2");
+			exit(EXIT_FAILURE);
+		}
+		close(cmd->fd_out);
+	}
+	else if (*cmd->i < nb_cmds)
+	{
+		if (dup2(fd[1], STDOUT_FILENO) == -1)
+		{
+			perror("dup2");
+			exit(EXIT_FAILURE);
+		}
+		close(fd[1]);
+	}
+	else
+	{
+		handle_last_command(cmd, fd);
+	}
+	execute_child(cmd);
 	perror("minishell");
-	close(cmd->fd_in);
-	close(cmd->fd_out);
+	exit(EXIT_FAILURE);
 }
