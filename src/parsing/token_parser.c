@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:31:09 by yrigny            #+#    #+#             */
-/*   Updated: 2024/05/09 20:41:07 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/09 21:05:26 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	parse_token_into_cmds(t_token *tokens)
 	if (!tokens)
 		return ;
 	ms = get_ms();
-	// pre_expand(tokens);
 	ms->cmds = gen_cmd_list(tokens);
 	free_tokens(&tokens);
 }

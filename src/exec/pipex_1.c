@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 16:04:56 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/05/09 16:17:01 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/09 21:05:04 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,9 +113,7 @@ void	handle_child_output(int nb_cmds, t_cmd *cmd, int *fd, int *output_fd)
 		close(fd[1]);
 	}
 	else
-	{
 		handle_last_command(cmd, fd);
-	}
 	execute_child(cmd);
 	perror("minishell");
 	exit(EXIT_FAILURE);
