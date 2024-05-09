@@ -12,12 +12,12 @@
 
 #include "minishell.h"
 
-bool	has_expandable_dollar_str(t_token *token, int *dollar_pos)
+bool	has_expandable_dollar_str(char *original, int *dollar_pos)
 {
 	char	*s;
 	int		quote_open;
 
-	s = token->value;
+	s = original;
 	quote_open = 0;
 	while (*s)
 	{
@@ -31,7 +31,7 @@ bool	has_expandable_dollar_str(t_token *token, int *dollar_pos)
 		else if (quote_open != '\'' && *s == '$'
 			&& ((ft_isalnum(*(s + 1)) || *(s + 1) == '_') || *(s + 1) == '?'))
 		{
-			*dollar_pos = s - token->value;
+			*dollar_pos = s - original;
 			return (1);
 		}
 		s++;

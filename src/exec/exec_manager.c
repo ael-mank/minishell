@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:23:50 by yrigny            #+#    #+#             */
-/*   Updated: 2024/05/09 16:08:24 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/09 20:41:04 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,15 @@ void	exec_manager(void)
 	ms = get_ms();
 	cmds = ms->cmds;
 	nb_cmds = ft_lstsize(cmds);
+	// printf("nb_cmds=%d\n", nb_cmds);
 	if (nb_cmds == 0)
 		return ;
+	if (nb_cmds > MAX_PIPE)
+	{
+		ft_putstr_fd("unable to pipe\n", 2);
+		ms->last_exit = 1;
+		return ;
+	}
 	handle_redirections(cmds);
 	if (any_cmd_failed(cmds))
 		ms->last_exit = 1;
@@ -47,6 +54,7 @@ void	handle_redirections(t_list *cmds)
 		while (token && valid_redir)
 		{
 			if (token->type == TOKEN_REDIR_HEREDOC
+				|| token->type == TOKEN_REDIR_HEREDOC_WEXP
 				|| token->type == TOKEN_REDIR_IN)
 				valid_redir = handle_redir_in(curr_cmd, token);
 			else

@@ -2,7 +2,7 @@
 CC = cc
 SRC_DIR = ./src/
 OBJ_DIR = ./obj/
-CFLAGS = -Wall -Wextra -Werror -Ilibft/include -Iinclude
+CFLAGS = -Wall -Wextra -Werror -Ilibft/include -Iinclude -g3
 SRC_FILES = main minishell_utils\
 			exec/exec exec/exec_utils exec/pipex_1 exec/pipex_2 exec/redir_manager exec/exec_manager\
 			syntax_checking/check_syntax syntax_checking/syntax_utils \

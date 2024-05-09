@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 04:24:10 by yrigny            #+#    #+#             */
-/*   Updated: 2024/05/09 16:56:52 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/09 20:00:36 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	execute_child(t_cmd *child)
 
 	if (child->fd_in == -1 || child->fd_out == -1)
 		child_free_exit(1);
-	if (!child->cmd_arr[0] || child->cmd_arr[0][0] == '\0')
+	if (!child->cmd_arr || !child->cmd_arr[0] || child->cmd_arr[0][0] == '\0')
 		child_free_exit(0);
 	if (is_builtin(child->cmd_arr[0]))
 	{
