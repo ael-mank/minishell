@@ -6,13 +6,12 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 12:14:29 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/05/06 11:20:49 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/09 21:03:06 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// Might need to add sum signals handling in the exec part
 extern int		g_signal;
 
 void	sigint_handler(int sig)
@@ -55,5 +54,5 @@ void	handle_heredoc_signal(int sig)
 {
 	g_signal = sig;
 	ft_printf("\n");
-	child_free_exit(130);
+	heredoc_free_exit(130);
 }

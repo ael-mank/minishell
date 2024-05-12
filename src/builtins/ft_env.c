@@ -6,16 +6,25 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 07:04:36 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/04/30 20:57:15 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/09 16:58:39 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_env(t_list *env)
+int	ft_env(t_list *env, char **args)
 {
 	t_list	*tmp;
+	int		argc;
 
+	argc = 0;
+	while (args[argc])
+		argc++;
+	if (argc > 1)
+	{
+		ft_printf("env: '%s': No such file or directory\n", args[1]);
+		return (127);
+	}
 	tmp = env;
 	while (tmp)
 	{

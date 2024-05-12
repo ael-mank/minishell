@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 09:37:20 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/05/02 10:34:11 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/09 17:10:49 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,18 +72,22 @@ int	ft_exit(char **args)
 	int	i;
 
 	i = 0;
+	status = 0;
 	while (args[i])
 		i++;
-	if (i > 2)
+	if ((args[1] && is_number(args[1])) && i > 2)
 	{
-		ft_putstr_fd("exit: too many arguments\n", 2);
+		ft_putstr_fd("exit\nminishell: exit: too many arguments\n", 2);
 		return (1);
 	}
 	ft_printf("exit\n");
 	if (i == 2 && is_input_valid(args))
 		status = ft_atoi(args[1]);
-	else
+	else if (args[1])
+	{
+		ft_putstr_fd("minishell: exit: numeric argument required\n", 2);
 		status = 2;
+	}
 	free_cmd_list();
 	free_env();
 	rl_clear_history();
