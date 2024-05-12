@@ -37,6 +37,8 @@ char	*get_prompt(void)
 	char	*finalprompt;
 
 	user = match_env_var("USER", 4);
+	if (ft_strncmp(user, "", 1) == 0)
+		user = ft_strdup("minishell");
 	pwd = get_pwd();
 	temp_1 = ft_strjoin(user, "@");
 	temp_2 = ft_strjoin(temp_1, pwd);
