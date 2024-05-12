@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_parser.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrigny <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:31:09 by yrigny            #+#    #+#             */
-/*   Updated: 2024/05/02 16:31:11 by yrigny           ###   ########.fr       */
+/*   Updated: 2024/05/09 21:05:26 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	parse_token_into_cmds(t_token *tokens)
 	if (!tokens)
 		return ;
 	ms = get_ms();
-	pre_expand(tokens);
 	ms->cmds = gen_cmd_list(tokens);
 	free_tokens(&tokens);
 }
@@ -58,9 +57,15 @@ t_list	*parse_cmd(t_token **tokens)
 		return (NULL);
 	while (*tokens && (*tokens)->type != TOKEN_PIPE)
 	{
+		expand_dollar_str(&(*tokens)->value);
+		if ((*tokens)->value[0] == '\0')
+		{
+			*tokens = (*tokens)->next;
+			continue ;
+		}
 		if ((*tokens)->type >= TOKEN_REDIR_IN
 			&& (*tokens)->type <= TOKEN_REDIR_APPEND)
-			parse_redir((*tokens)->next->value, &new_cmd->redir, tokens);
+			parse_redir(&new_cmd->redir, tokens);
 		else if ((*tokens)->type == TOKEN_WORD)
 			parse_cmd_and_arg(&cmd_arg, tokens);
 	}
@@ -69,17 +74,19 @@ t_list	*parse_cmd(t_token **tokens)
 	return (ft_lstnew(new_cmd));
 }
 
-void	parse_redir(char *file, t_token **redir_list, t_token **tokens)
+void	parse_redir(t_token **redir_list, t_token **tokens)
 {
 	t_token	*new_file;
 	t_token	*tmp;
 
+	(*tokens)->next->type = (*tokens)->type;
+	remove_quotes((*tokens)->next, (*tokens)->next->value);
 	new_file = malloc(sizeof(t_token));
 	if (!new_file)
 		return ;
 	new_file->next = NULL;
-	new_file->type = (*tokens)->type;
-	new_file->value = ft_strdup(file);
+	new_file->type = (*tokens)->next->type;
+	new_file->value = ft_strdup((*tokens)->next->value);
 	if (!(new_file->value))
 		return ;
 	if (!(*redir_list))
@@ -99,6 +106,12 @@ void	parse_cmd_and_arg(t_list **cmd_arg, t_token **tokens)
 	char	*new_word;
 	t_list	*new_node;
 
+	remove_quotes(*tokens, (*tokens)->value);
+	if ((*tokens)->value[0] == '\0')
+	{
+		*tokens = (*tokens)->next;
+		return ;
+	}
 	new_word = ft_strdup((*tokens)->value);
 	if (!new_word)
 		return ;

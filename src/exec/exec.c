@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrigny <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 04:24:10 by yrigny            #+#    #+#             */
-/*   Updated: 2024/05/07 04:24:13 by yrigny           ###   ########.fr       */
+/*   Updated: 2024/05/09 20:00:36 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,10 @@
 void	execute_child(t_cmd *child)
 {
 	int		exit_code;
-	char	**env;
 
 	if (child->fd_in == -1 || child->fd_out == -1)
 		child_free_exit(1);
-	if (!child->cmd_arr[0] || child->cmd_arr[0][0] == '\0')
+	if (!child->cmd_arr || !child->cmd_arr[0] || child->cmd_arr[0][0] == '\0')
 		child_free_exit(0);
 	if (is_builtin(child->cmd_arr[0]))
 	{
@@ -34,9 +33,11 @@ void	execute_child(t_cmd *child)
 		ft_putstr_fd(": command not found\n", 2);
 		child_free_exit(127);
 	}
-	env = env_to_array();
+	char **(env) = env_to_array();
 	execve(child->fullpath, child->cmd_arr, env);
 	perror("minishell");
+	close(child->fd_in);
+	close(child->fd_out);
 	child_free_exit(1);
 }
 
@@ -78,7 +79,7 @@ int	exec_single_builtin(t_cmd *cmd)
 	else if (!ft_strncmp(cmd_name, "unset", 6))
 		exit_code = ft_unset(cmd->cmd_arr, ms->env);
 	else if (!ft_strncmp(cmd_name, "env", 4))
-		exit_code = ft_env(ms->env);
+		exit_code = ft_env(ms->env, cmd->cmd_arr);
 	else if (!ft_strncmp(cmd_name, "exit", 5))
 		exit_code = ft_exit(cmd->cmd_arr);
 	return (exit_code);

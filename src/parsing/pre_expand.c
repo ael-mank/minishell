@@ -6,34 +6,31 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:28:46 by yrigny            #+#    #+#             */
-/*   Updated: 2024/05/07 22:19:18 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/09 21:05:38 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	pre_expand(t_token *tokens)
+void	expand_dollar_str(char **p_str)
 {
 	int	dollar_pos;
 
-	while (tokens)
+	dollar_pos = 0;
+	while (has_expandable_dollar_str(*p_str, &dollar_pos))
 	{
-		dollar_pos = 0;
-		while (has_expandable_dollar_str(tokens, &dollar_pos))
-			expand_env_var(tokens, dollar_pos);
-		remove_quotes(tokens, tokens->value);
-		tokens = tokens->next;
+		expand_env_var(p_str, dollar_pos);
 	}
 }
 
-void	expand_env_var(t_token *token, int head)
+void	expand_env_var(char **p_old_str, int head)
 {
 	int		end;
 	char	*old_str;
 	char	*env_var_value;
 	char	*new_str;
 
-	old_str = token->value;
+	old_str = *p_old_str;
 	end = head + 1;
 	if (old_str[end] != '?')
 	{
@@ -43,7 +40,7 @@ void	expand_env_var(t_token *token, int head)
 	env_var_value = match_env_var(&old_str[head + 1], end - head);
 	new_str = assemble_new_str(old_str, env_var_value, head, end);
 	free(old_str);
-	token->value = new_str;
+	*p_old_str = new_str;
 }
 
 char	*match_env_var(char *name, int len)
@@ -92,9 +89,12 @@ void	remove_quotes(t_token *token, char *old_str)
 			i += 1;
 			while (old_str[i] != quote)
 				i++;
-			pair_of_quotes += 1;
+			if (old_str[i] == quote)
+				pair_of_quotes += 1;
 		}
 	}
+	if (!pair_of_quotes && token->type == TOKEN_REDIR_HEREDOC)
+		token->type = TOKEN_REDIR_HEREDOC_WEXP;
 	new_str = assemble_new_str2(old_str, pair_of_quotes);
 	free(old_str);
 	token->value = new_str;

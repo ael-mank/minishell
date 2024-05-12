@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:22:08 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/05/03 11:20:23 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/09 16:59:12 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	ft_export(char **args, t_list *env)
 
 	exit_code = 0;
 	if (!args[1])
-		ft_putstr_fd("export: usage: export name=value\n", 2);
+		ft_env(env, args);
 	i = 0;
 	while (args[++i])
 	{

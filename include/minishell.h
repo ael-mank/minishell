@@ -6,7 +6,7 @@
 /*   By: ael-mank <ael-mank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 09:36:17 by ael-mank          #+#    #+#             */
-/*   Updated: 2024/05/06 11:49:42 by ael-mank         ###   ########.fr       */
+/*   Updated: 2024/05/09 21:04:28 by ael-mank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef enum e_token_type
 	TOKEN_PIPE,
 	TOKEN_REDIR_IN,
 	TOKEN_REDIR_HEREDOC,
+	TOKEN_REDIR_HEREDOC_WEXP,
 	TOKEN_REDIR_OUT,
 	TOKEN_REDIR_APPEND,
 }					t_token_type;
@@ -55,6 +56,7 @@ typedef struct s_cmd
 	t_token			*redir;
 	int				fd_in;
 	int				fd_out;
+	int				*i;
 }					t_cmd;
 
 typedef struct s_env
@@ -76,6 +78,7 @@ typedef struct s_ms
 	pid_t			pids[1024];
 	t_pipe			pipe[MAX_PIPE];
 	int				last_exit;
+	int				fd_heredoc;
 }					t_ms;
 
 /* structure */
@@ -97,6 +100,7 @@ void				sigint_handler(int sig);
 void				child_sigint_handler(int sig);
 void				update_heredoc_signal(int sig);
 void				handle_heredoc_signal(int sig);
+void				heredoc_free_exit(int exit_code);
 
 /* syntax check */
 t_token				*check_syntax_and_tokenize(char *line);
@@ -125,17 +129,21 @@ void				free_tokens(t_token **tokens);
 void				parse_token_into_cmds(t_token *tokens);
 t_list				*gen_cmd_list(t_token *tokens);
 t_list				*parse_cmd(t_token **tokens);
-void				parse_redir(char *file, t_token **redir_list,
-						t_token **tokens);
+// void				parse_redir(char *file, t_token **redir_list,
+// t_token **tokens);
+void				parse_redir(t_token **redir_list, t_token **tokens);
 void				parse_cmd_and_arg(t_list **cmd_arg, t_token **tokens);
 void				reform_as_cmd_arr(t_list *cmd_arg, t_cmd *cmd);
 void				free_cmd_arg_list(t_list **cmd_arg);
 void				free_str_arr(char ***p_str_arr);
 
 /* expansion */
-void				pre_expand(t_token *tokens);
-bool				has_expandable_dollar_str(t_token *token, int *dollar_pos);
-void				expand_env_var(t_token *token, int head);
+// void				pre_expand(t_token *tokens);
+void				expand_dollar_str(char **str);
+// bool				has_expandable_dollar_str(t_token *token, int *dollar_pos);
+bool				has_expandable_dollar_str(char *original, int *dollar_pos);
+// void				expand_env_var(t_token *token, int head);
+void				expand_env_var(char **p_old_str, int head);
 char				*match_env_var(char *name, int len);
 char				*assemble_new_str(char *old_str, char *value, int head,
 						int end);
@@ -146,8 +154,10 @@ void				remove_quotes(t_token *token, char *old_str);
 void				handle_redirections(t_list *cmds);
 bool				handle_redir_in(t_cmd *cmd, t_token *src);
 void				gen_unique_filename(unsigned long p, t_cmd *cmd);
-int					get_heredoc(char *delimiter, char *filename);
-void				receive_heredoc(char *delimiter, int fd);
+// int					get_heredoc(char *delimiter, char *filename);
+int					get_heredoc(t_token *src, char *filename);
+// void				receive_heredoc(char *delimiter, int fd);
+void				receive_heredoc(t_token_type type, char *delimiter, int fd);
 bool				handle_redir_out(t_cmd *cmd, t_token *dst);
 
 /* path check */
@@ -165,15 +175,24 @@ char				**create_env_array(t_list *env);
 void				gen_env_dict(char **env_array, t_list *env);
 void				single_cmd_exec(t_cmd *cmd);
 bool				is_builtin(char *cmd_name);
+bool				any_cmd_failed(t_list *cmds);
 int					exec_builtin(t_cmd *child);
 int					exec_single_builtin(t_cmd *cmd);
-void				pipex(t_ms *ms, t_list *cmds, int nb_cmds);
-void				fork_children(int nb_cmds, t_pipe pipe_arr[MAX_PIPE],
-						t_list *cmds);
-void				child_first(t_cmd *child, int pipe[2]);
-void				child_middle(t_cmd *child, int pipe1[2], int pipe2[2]);
-void				child_last(t_cmd *child, int pipe[2]);
+// void				pipex(t_ms *ms, t_list *cmds, int nb_cmds);
+// void				fork_children(int nb_cmds, t_pipe pipe_arr[MAX_PIPE],
+// 						// t_list *cmds);
+// void				child_first(t_cmd *child, int pipe[2]);
+// void				child_middle(t_cmd *child, int pipe1[2], int pipe2[2]);
+// void				child_last(t_cmd *child, int pipe[2]);
 void				update_last_exit_status(int status);
+void				pipex(t_ms *ms, t_list *cmds, int nb_cmds);
+void				child_process(int i, int nb_cmds, t_cmd *cmd,
+						int *output_cache);
+void				handle_pipe(int *fd, t_ms *ms, int i);
+void				handle_parent_process(int *fd, int *output_fd);
+void				handle_child_input(t_cmd *cmd, int *fd, int *output_fd);
+void				handle_child_output(int nb_cmds, t_cmd *cmd, int *fd,
+						int *output_fd);
 
 /* builtins */
 int					ft_echo(char **args);
@@ -189,7 +208,7 @@ void				export_invalid_msg(char *arg);
 int					ft_unset(char **args, t_list *env);
 void				unset_env_var(char *arg, t_list **env);
 void				free_and_relink(t_list *prev, t_list *current);
-int					ft_env(t_list *env);
+int					ft_env(t_list *envm, char **args);
 int					ft_exit(char **args);
 void				free_cmd_list(void);
 int					is_input_valid(char **args);
